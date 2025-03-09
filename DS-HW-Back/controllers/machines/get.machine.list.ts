@@ -24,10 +24,10 @@ interface RequestBody extends Request {
 const listMachineController = async (req: RequestBody, res: Response) => {
     logger.verbose('[Machine, listMachineController]', `User:${req.user.email} action:Get Machine List`)
     let page = req.query.page || 1;
-    const { limit = 10, search = "", role = "" } = req.query;
+    const { limit = 1000, search = "", role = "" } = req.query;
     let query = []
     page = Number(page) - 1;
-    const since = page * 10;
+    const since = page * 1000;
 
     // TODO campos calibration
     if (search) query.push({ $or: [{ id_maquina: { $regex: `${search}`, $options: 'i' } }, { nomMaquina: { $regex: `${search}`, $options: 'i' } }, { email: { $regex: `${search}`, $options: 'i' } }] })
