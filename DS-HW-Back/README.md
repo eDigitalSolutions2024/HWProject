@@ -36,18 +36,18 @@ Add this on MongoDB - hw-calibration - user: You need change firstName, LastName
   "_id": {
     "$oid": "64deeb29467d93a9f6e35b26"
   },
-  "firstName": "TuNombre",
-  "lastName": "TuApellido",
-  "email": "tuemail@dominio.com",
+  "firstName": "Eveliel",
+  "lastName": "Olivas",
+  "email": "eolivas@edigitalsolutions.com.mx",
   "password": "$2a$10$Yf1vzD8Y/2/ULyX4.dVgg.cs.A0ixjUA9BKZCFwgZrGddXLo1miDq",
   "role": {
     "$oid": "64da7e24734f1bd82fafc013"
   },
   "entryDate": {
-    "$date": "2023-08-17T05:00:00.000Z"
+    "$date": "2025-03-08T05:00:00.000Z"
   },
   "birthDate": {
-    "$date": "2001-08-15T06:00:00.000Z"
+    "$date": "1991-06-12T06:00:00.000Z"
   },
   "attachments": [],
   "status": true,
