@@ -1,0 +1,65 @@
+.avatar {
+    border-radius: 50%;
+}
+
+.tab-selector-border-color-right {
+    border-right-color: $primary !important;
+}
+
+.tab-selector-border-color-left {
+    border-left-color: $primary;
+}
+
+.create-dot {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background-color: green !important;
+    border-radius: 50%;
+}
+
+.update-dot {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background-color: #00243D !important;
+    border-radius: 50%;
+}
+
+.delete-dot {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background-color: red !important;
+    border-radius: 50%;
+}
+
+.action-table {
+    &_header {
+        &_date {
+            width: 186px !important;
+        }
+
+        &_type {
+            width: 60px !important;
+        }
+
+        &_objetive {
+            width: 120px !important;
+        }
+    }
+
+    &_td {
+        &_date {
+            width: 186px !important;
+        }
+
+        &_type {
+            width: 60px !important;
+        }
+
+        &_objetive {
+            width: 120px !important;
+        }
+    }
+}

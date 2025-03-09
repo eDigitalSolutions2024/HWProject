@@ -1,0 +1,55 @@
+.login-container {
+    background-image: url('/login-cover3.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    background-color: none !important;
+}
+
+.login-form {
+    width: 90vw !important;
+    height: 80vh !important;
+    border-radius: $space-xxl !important;
+
+    @include media-resolution(sm) {
+        height: 75vh !important;
+        width: 75vw !important;
+    }
+
+
+    &_left-container {
+        background-color: $bg-primary;
+        height: 40%;
+        width: 100%;
+        border-width: 0 !important;
+        border-top-left-radius: $space-xl;
+        border-top-right-radius: $space-xl;
+
+        @include media-resolution(sm) {
+            width: 50% !important;
+            height: 100%;
+            border-bottom-left-radius: $space-xl !important;
+            border-top-left-radius: $space-xl !important;
+            border-top-right-radius: 0 !important;
+
+        }
+    }
+
+    &_right-container {
+        background-color: $ui-03;
+        height: 60%;
+        border-bottom-right-radius: $space-xl;
+        border-bottom-left-radius: $space-xl;
+
+        @include media-resolution(sm) {
+            width: 50% !important;
+            height: 100%;
+            border-bottom-right-radius: $space-xl !important;
+            border-top-right-radius: $space-xl !important;
+            border-bottom-left-radius: 0 !important;
+        }
+    }
+}

@@ -1,0 +1,276 @@
+//NavBar
+.NavbarComponent {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    .navbar {
+        transition: 0.3s !important;
+        z-index: 999 !important;
+        box-shadow: 28px 2px 31px -19px rgba(0, 0, 0, 0.35);
+        background-color: $bg-primary;
+        padding: 0 !important;
+        justify-content: unset !important;
+        align-items: unset !important;
+        flex-wrap: nowrap;
+        -webkit-box-shadow: 28px 2px 31px -19px rgba(0, 0, 0, 0.35);
+        -moz-box-shadow: 28px 2px 31px -19px rgba(0, 0, 0, 0.35);
+        // Hide Scrollbar menu
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+
+        /* Firefox */
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        &-info {
+            justify-content: space-between;
+
+            @media (min-width: 922px) {
+                & {
+                    justify-content: center;
+                }
+            }
+        }
+
+        .active-toggler-menu {
+            max-height: 1000px !important;
+        }
+
+        hr {
+            display: none;
+        }
+
+        &.active-menu {
+            height: 100vh !important;
+
+            hr {
+                display: block;
+            }
+        }
+
+        &-nav {
+            transition: all 0.2s ease-out !important;
+            max-height: 0 !important;
+        }
+
+        &::-webkit-scrollbar {
+            display: none !important;
+        }
+
+        .position-image {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            min-height: fit-content;
+        }
+
+        .header-button {
+            display: initial !important;
+            color: $primary;
+            font-size: $space-l !important;
+            border-color: none !important;
+            padding: 0 !important;
+
+            &:focus,
+            &:hover,
+            &:active {
+                border-color: none !important;
+                color: $hover-primary;
+            }
+
+            &:focus {
+                box-shadow: none !important;
+            }
+
+            @media (min-width: 922px) {
+                & {
+                    display: none !important;
+                }
+            }
+        }
+
+        &-container {
+            position: relative;
+
+            .navbar-subnav {
+                position: absolute;
+                height: 100vh !important;
+                width: 100% !important;
+                background-color: $bg-primary;
+                top: 0;
+                left: -100%;
+                padding: 0 !important;
+                transition: all 0.3s ease-in-out;
+                z-index: 1;
+
+                &.active {
+                    left: 0;
+                }
+            }
+        }
+    }
+
+    .logout-option {
+        z-index: 998 !important;
+        cursor: pointer;
+    }
+
+    .nav {
+        &-link {
+            font-size: 1rem;
+            display: flex !important;
+            align-items: center !important;
+            width: 100% !important;
+            margin: 0px;
+
+            //height: 80px !important;
+            &:active,
+            &:focus,
+            &:hover,
+            &.hover {
+                transition: 0s !important;
+                // background-color: $primary;
+                // color: $text-black !important;
+                color: $primary !important;
+                border-right: 6px solid $hover-primary !important;
+            }
+        }
+    }
+
+    nav ul {
+        li {
+            color: $primary !important;
+        }
+    }
+
+    .name-user {
+        display: none;
+    }
+
+    .list__show {
+        transition: all 0.4s;
+        max-height: 0px;
+    }
+
+    .list__button--click:hover {
+        cursor: pointer;
+    }
+
+    @media (min-width: 922px) {
+        .logout-option {
+            width: $navbar-width !important;
+            position: absolute;
+            bottom: 0 !important;
+        }
+
+        .item-option {
+            width: $navbar-width !important;
+            position: relative;
+            left: 0 !important;
+            padding-left: 3px !important;
+        }
+    }
+}
+
+@media (min-width: 922px) {
+    .NavbarComponent {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+        .navbar {
+            width: $navbar-width;
+            min-height: 100vh;
+            height: 100%;
+            position: fixed;
+            overflow-y: auto !important;
+
+            &-info {
+                height: 124px;
+            }
+
+            &:hover {
+                width: $navbar-width !important;
+
+                .name-user {
+                    display: block;
+                }
+            }
+
+            hr {
+                display: block;
+            }
+
+            &-nav {
+                height: 100% !important;
+            }
+
+            .position-image {
+                width: 100px;
+                height: 100px;
+                margin-top: $space-s !important;
+            }
+        }
+
+        .logout-option {
+            z-index: 998 !important;
+            cursor: pointer;
+        }
+
+
+        nav ul {
+            li {
+                color: $primary !important;
+            }
+        }
+
+        .name-user {
+            display: block;
+        }
+
+        .header-button {
+            display: none;
+            color: $primary;
+            font-size: $space-l;
+            border-color: none !important;
+
+            &:focus,
+            &:hover,
+            &:active {
+                border-color: none !important;
+                color: $hover-primary;
+            }
+
+            &:focus {
+                box-shadow: none !important;
+            }
+        }
+
+        &.active {
+            .navbar {
+                width: $navbar-width-active !important;
+
+                .position-image {
+                    width: 40px !important;
+                    height: 40px !important;
+                }
+
+                &:hover {
+                    width: $navbar-width !important;
+
+                    .position-image {
+                        width: 100px !important;
+                        height: 100px !important;
+                    }
+                }
+            }
+
+            .name-user {
+                display: none;
+            }
+        }
+    }
+}

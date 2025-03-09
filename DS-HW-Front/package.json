@@ -1,0 +1,38 @@
+{
+  "name": "Honeywell-admin-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development next dev -p 7030",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.9.5",
+    "axios": "^1.4.0",
+    "bootstrap": "^5.3.1",
+    "cross-env": "^7.0.3",
+    "dayjs": "^1.11.9",
+    "emailjs-com": "^3.2.0",
+    "eslint": "8.47.0",
+    "eslint-config-next": "13.4.13",
+    "Honeywell-admin-web": "file:",
+    "js-cookie": "^3.0.5",
+    "js-file-download": "^0.4.12",
+    "jwt-decode": "^3.1.2",
+    "next": "^13.5.6",
+    "react": "18.2.0",
+    "react-bootstrap": "^2.8.0",
+    "react-dom": "18.2.0",
+    "react-dropzone": "^14.2.3",
+    "react-hook-form": "^7.45.4",
+    "react-qr-code": "^2.0.12",
+    "react-redux": "^8.1.2",
+    "react-spinners": "^0.13.8",
+    "react-toastify": "^9.1.3"
+  },
+  "devDependencies": {
+    "sass": "^1.65.1"
+  }
+}

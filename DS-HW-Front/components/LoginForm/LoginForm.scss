@@ -1,0 +1,51 @@
+.login_form {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-top: $space-l;
+
+    @include media-resolution(sm) {
+        margin-top: -$space-l;
+        justify-content: center;
+    }
+
+
+    .nav-link {
+        font-size: 1.25rem;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end;
+        width: 100% !important;
+        margin: 0px;
+        height: 50px !important;
+        margin-top: $space-l;
+
+        &:focus,
+        &:hover {
+            background-color: $primary;
+            color: white !important;
+        }
+    }
+
+    &_text-color {
+        color: $bg-primary;
+    }
+
+    &_inputs {
+        &--input {
+            border: none;
+            border-left: 1px solid rgb(172, 166, 166);
+            outline: none;
+            padding-left: 10px;
+            width: 100%;
+        }
+    }
+
+
+
+    .active-link {
+        background-color: $primary !important;
+        color: white !important;
+    }
+}

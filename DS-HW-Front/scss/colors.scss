@@ -1,0 +1,47 @@
+@import "./variables.scss";
+
+.bg-primary {
+    background: $bg-primary !important;
+}
+
+.bg-secondary {
+    background-color: $bg-secondary !important;
+}
+
+.bg-ui-03 {
+    background-color: $ui-03;
+}
+
+.color-text-01 {
+    color: $text-01;
+}
+
+.color-black {
+    color: $text-black;
+}
+
+
+
+.color-primary {
+    color: $primary;
+}
+
+.color-text-02 {
+    color: $text-02;
+}
+
+.color-text-03 {
+    color: $text-03;
+}
+
+.color-ui-01 {
+    color: $ui-01;
+}
+
+.color-ui-02 {
+    color: $ui-02;
+}
+
+.color-ui-03 {
+    color: $ui-03;
+}

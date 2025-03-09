@@ -1,0 +1,117 @@
+$breakpoints: (
+    mobile: 375px,
+    tablet: 576px,
+    xs: 768px,
+    sm: 992px,
+    md: 1280px,
+    lg: 1920px,
+    xl: 2048px,
+);
+
+@mixin media-resolution($breakpoint) {
+    @media screen and (min-width: map-get($breakpoints, $breakpoint)) {
+        @content;
+    }
+}
+
+a,
+a:hover,
+a:focus,
+a:active {
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
+.flex-between {
+    display: flex !important;
+    justify-content: space-between !important;
+}
+
+.flex-center {
+    display: flex !important;
+    justify-content: center !important;
+}
+
+.flex-end {
+    display: flex !important;
+    justify-content: flex-end !important;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.text-justify {
+    text-align: justify !important;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.w-15 {
+    width: 15%;
+}
+
+.rounded-0-right {
+    border-bottom-right-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+}
+
+.rounded-0-left {
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+}
+
+.font-size-icon-table {
+    font-size: 20px !important;
+}
+
+.font-size-8 {
+    font-size: 8px;
+}
+
+.font-size-12 {
+    font-size: 12px;
+}
+
+.font-size-24 {
+    font-size: 24px;
+}
+
+.font-size-32 {
+    font-size: 32px;
+}
+
+.input-transparent {
+    background: transparent;
+    padding: 10px;
+    border-bottom: solid 1px;
+
+    &:focus {
+        background: transparent;
+        outline: 0 none;
+        border: 0 none;
+    }
+
+    &:active {
+        outline: 0 none;
+        border: 0 none;
+    }
+}
+
+.transition {
+    transition: all 0.3s ease-in-out;
+}
+
+.h-fit {
+    max-height: 700px !important;
+}
+
+.rotate-90 {
+    transform: rotate(90deg);
+}
+
+.w-fit {
+    width: max-content !important;
+}
