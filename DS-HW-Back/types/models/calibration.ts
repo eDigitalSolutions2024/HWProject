@@ -1,6 +1,8 @@
 import { Types } from "mongoose"
 
 export interface Calibration {
+    seccion: string
+    cargar_certificado: string
     id_maquina: string
     nomMaquina: string
     serial: string
