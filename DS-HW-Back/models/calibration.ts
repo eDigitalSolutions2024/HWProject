@@ -11,12 +11,12 @@ const CalibrationSchema = new Schema({
     },
     seccion: {
         type: String,
-        requiered: [true, 'La seccion es obligatoria'],
+        required: [true, 'La seccion es obligatoria'],
         unique: true
     },
     cargar_certificado:{
         type: String,
-        requieres: [true, 'El certificado es obligatorio'],
+        required: [true, 'El certificado es obligatorio'],
         unique: true
     },
     nomMaquina: {
