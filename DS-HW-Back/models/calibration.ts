@@ -9,6 +9,16 @@ const CalibrationSchema = new Schema({
         required: [true, 'El Id es obligatorio'],
         unique: true
     },
+    seccion: {
+        type: String,
+        requiered: [true, 'La seccion es obligatoria'],
+        unique: true
+    },
+    cargar_certificado:{
+        type: String,
+        requieres: [true, 'El certificado es obligatorio'],
+        unique: true
+    },
     nomMaquina: {
         type: String,
         required: [true, 'El nombre de la maquina es obligatorio']

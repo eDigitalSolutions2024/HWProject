@@ -24,7 +24,7 @@ const createMachineController = async (req: RequestBody, res: Response) => {
 
     // const {foto_equipo, foto_etiqueta_calibracion} = req.files as Express.Multer.File[]
     
-    const { id_maquina, nomMaquina, serial, manufacturador, 
+    const { id_maquina, nomMaquina, serial, manufacturador,
                 proveedor, type, loc1, loc2, loc3, last_calibration_date,
                 calibration_interval_define, expira, rango_trabajo, comments,
                 liga_certificado } = req.body;
@@ -59,7 +59,7 @@ const createMachineController = async (req: RequestBody, res: Response) => {
         
 
         const calibration = new Calibration({
-            id_maquina, nomMaquina, serial, manufacturador, 
+            id_maquina, nomMaquina, serial, manufacturador,
                 proveedor, type, loc1, loc2, loc3, last_calibration_date: dateLastCalibDate,
                 calibration_interval_define, expira: dateExpira, rango_trabajo, comments,
                 liga_certificado,foto_equipo: attachment1?._id ,foto_etiqueta_calibracion: attachment2?._id
