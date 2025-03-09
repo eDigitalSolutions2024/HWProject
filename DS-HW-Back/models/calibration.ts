@@ -15,9 +15,8 @@ const CalibrationSchema = new Schema({
         unique: true
     },
     cargar_certificado:{
-        type: String,
-        required: [true, 'El certificado es obligatorio'],
-        unique: true
+       type: Schema.Types.ObjectId,
+        ref: 'Attachment'
     },
     nomMaquina: {
         type: String,

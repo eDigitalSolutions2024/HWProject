@@ -16,15 +16,19 @@ const createMachineController = async (req: RequestBody, res: Response) => {
     logger.verbose('[Machines, createMachineController]', `User:${req?.user?.email} Add new Machine`);
     let attachment1;
     let attachment2;
+    let attachment3; 
+
     //@ts-expect-error
     const foto_equipo = req?.files?.foto_equipo;
 
     //@ts-expect-error
     const foto_etiqueta_calibracion = req?.files?.foto_etiqueta_calibracion;
 
+    const cargar_certificado = (req.files as { [fieldname: string]: Express.Multer.File[] })?.cargar_certificado;
+
     // const {foto_equipo, foto_etiqueta_calibracion} = req.files as Express.Multer.File[]
     
-    const { id_maquina, nomMaquina, serial, manufacturador, seccion, cargar_certificado,
+    const { id_maquina, nomMaquina, serial, manufacturador, seccion,
                 proveedor, type, loc1, loc2, loc3, last_calibration_date,
                 calibration_interval_define, expira, rango_trabajo, comments,
                 liga_certificado } = req.body;
@@ -53,8 +57,24 @@ const createMachineController = async (req: RequestBody, res: Response) => {
             }
             attachment2 = await new Attachment(attachmentData2);
         }
+        if(cargar_certificado) {
+            const attachmentData3 = {
+                name: `${cargar_certificado}`,
+                category: 'userAttachment',
+                fileType: cargar_certificado[0]?.filename?.split('.').pop(),
+                file: cargar_certificado,
+                createdBy: req?.user?._id
+            }
+            attachment3 = await new Attachment(attachmentData3);
+        }
         
-
+        console.log({
+            id_maquina, nomMaquina, serial, manufacturador, seccion, cargar_certificado,
+            proveedor, type, loc1, loc2, loc3, dateLastCalibDate, calibration_interval_define,
+            dateExpira, rango_trabajo, comments, liga_certificado,
+            attachment1_id: attachment1?._id, attachment2_id: attachment2?._id
+          });
+          
         
         
 
@@ -68,6 +88,7 @@ const createMachineController = async (req: RequestBody, res: Response) => {
 
         await attachment1?.save();
         await attachment2?.save();
+        await attachment3?.save();
         await calibration.save();
         
 

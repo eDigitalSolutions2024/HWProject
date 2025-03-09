@@ -45,7 +45,7 @@ const MachineForm = (props) => {
     </label>
     
     {/* Input para cargar el archivo */}
-    <input 
+    <input name="cargar_certificado" 
         type="file" 
         className='form-control my-2' 
         {...register("certificado", { 
@@ -116,7 +116,7 @@ const MachineForm = (props) => {
                 <div className='d-flex flex-between w-100'>
                     <div className='d-flex flex-column w-100 me-2'>
                         <label className='input-label'><span className="color-primary h5">*</span>  Última fecha de calibración</label>
-                        <input name='last_calibration_date' type="date" placeholder='Última fecha de calibración' max={dayjs().utc().format('YYYY-MM-DD')} className='form-control my-2' {...register("last_calibration_date")} />
+                        <input name='last_calibration_date' type="date" placeholder='Última fecha de calibración'  className='form-control my-2' {...register("last_calibration_date")} />
                         <span className='text-danger text-small d-block mb-2'>{errors?.last_calibration_date?.message}</span>
                     </div>
                     <div className='d-flex flex-column w-100 ms-2'>
@@ -126,7 +126,7 @@ const MachineForm = (props) => {
                     </div>
                     <div className='d-flex flex-column w-100 ms-2'>
                         <label className='input-label'><span className="color-primary h5">*</span>  Expira</label>
-                        <input name='expira' type="date" placeholder='Expira' min={dayjs().utc().format('YYYY-MM-DD')} className='form-control my-2' {...register("expira")} />
+                        <input name='expira' type="date" placeholder='Expira' className='form-control my-2' {...register("expira")} />
                         <span className='text-danger text-small d-block mb-2'>{errors?.expira?.message}</span>
                     </div>
                 </div>
