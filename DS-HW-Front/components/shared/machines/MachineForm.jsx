@@ -96,31 +96,30 @@ const MachineForm = (props) => {
                         <span className='text-danger text-small d-block mb-2'>{errors?.type?.message}</span>
                     </div>
                 </div>
+
                 <div className='d-flex flex-between w-100'>
-                    <div className='d-flex flex-column w-100 ms-2'>
-                        <label className='input-label'><span className="color-primary h5">*</span>  Unidad de Negocio</label>
-                        <input name='loc1' type="text" placeholder='Loc1' className='form-control my-2' {...register("loc1", { required: { value: true, message: 'El Loc1 es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
-                        <span className='text-danger text-small d-block mb-2'>{errors?.loc1?.message}</span>
-                        <label for="opciones">Selecciona la unidad de negocio</label>
-                        <select id="opciones" name="opciones">
-                            <option value="opcion1">Process Instruments</option>
-                            <option value="opcion2">Field Instruments</option>
-                            <option value="opcion3">Mercury Instruments</option>
-                            <option value="opcion4">S&P</option>
-                            <option value="opcion5">Warehouse</option>
-                            <option value="opcion6">NPI</option>
-                            <option value="opcion7">Cuarto de Bombas</option>
-                            <option value="opcion8">Oficinas</option>
-                        </select>
+                    <div className='d-flex flex-column w-100 me-2'>
+                        <label className='input-label me-2'><span className="color-primary h5" >*</span>  Área de negocio:</label>
+                        <select name='areaNegocio' className='form-control my-2' {...register("areaNegocio", { required: { value: true, message: 'El área de negocio es obligatoria' }, minLength: { value: 2, message: "Min lenght 2" } })} >
+                            <option>Process Instruments</option>
+                            <option>Field Instruments</option>
+                            <option>Mercury Instrumets</option>
+                            <option>S&P</option>
+                            <option>Warehouse</option>
+                            <option>NPI</option>
+                            <option>Cuarto de Bombas</option>
+                            <option>Oficinas</option>
+                            </select>
+                        <span className='text-danger text-small d-block mb-2'>{errors?.seccion?.message}</span>
                     </div>
                     <div className='d-flex flex-column w-100 ms-2'>
                         <label className='input-label'><span className="color-primary h5">*</span>  Área de producción</label>
-                        <input name='loc2' type="text" placeholder='Loc2' className='form-control my-2' {...register("loc2", { required: { value: true, message: 'El Loc2 es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
+                        <input name='loc2' type="text" placeholder='Área de producción' className='form-control my-2' {...register("loc2", { required: { value: true, message: 'El Loc2 es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
                         <span className='text-danger text-small d-block mb-2'>{errors?.loc2?.message}</span>
                     </div>
                     <div className='d-flex flex-column w-100 ms-2'>
                         <label className='input-label'><span className="color-primary h5">*</span>  Estación</label>
-                        <input name='loc3' type="text" placeholder='Loc3' className='form-control my-2' {...register("loc3", { required: { value: true, message: 'El Loc3 de maquina es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
+                        <input name='loc3' type="text" placeholder='Estacón' className='form-control my-2' {...register("loc3", { required: { value: true, message: 'El Loc3 de maquina es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
                         <span className='text-danger text-small d-block mb-2'>{errors?.loc3?.message}</span>
                     </div>
                 </div>
