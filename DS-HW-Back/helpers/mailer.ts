@@ -1,12 +1,15 @@
 import nodemailer from 'nodemailer'
+import dotenv from 'dotenv'
+
+// Carga las variables del archivo .env
+dotenv.config()
 
 const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
+    host: 'smtp.sendgrid.net',
     port: 587,
-    secure: false,
     auth: {
-        user: "omen_scorpio123@hotmail.com",
-        pass: "pa$$s3cr3t0"
+        user: 'apikey',
+        pass: process.env.SENDGRID_API_KEY as string
     }
 });
 
