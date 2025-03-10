@@ -12,39 +12,48 @@ interface RequestBody extends Request {
     user: UserInterface
 }
 
-
 const checkExpirationDate = async (req: RequestBody, res: Response) => {
-    logger.verbose('[Machine, checkExpirationDate]', `User:${req.user.email} action:Send Mail with Expiration Dates`)
-    // lectura de base de datos para obtener las maquinas
-    const [total, machines] = await Promise.all([
-        Calibration.countDocuments({ status: true }),
-        Calibration.find({ status: true })
-    ]);
-    let body: string[] = [];
+    try {
+        logger.verbose('[Machine, checkExpirationDate]', `User:${req.user.email} action: Send Mail with Expiration Dates`);
+        
+        const [total, machines] = await Promise.all([
+            Calibration.countDocuments({ status: true }),
+            Calibration.find({ status: true })
+        ]);
+        
+        let body: string[] = [];
 
-    machines.forEach(machine => {
-        const expirationDate = machine.expira;
-        const daysRemaining = calculateDaysRemaining(expirationDate);
+        machines.forEach((machine: { expira: any; id_maquina: any; nomMaquina: any; }) => {
+            const expirationDate = machine.expira;
+            const daysRemaining = calculateDaysRemaining(expirationDate);
 
-         if (daysRemaining <= 7 && daysRemaining >= 0) {
-             console.log(`Quedan ${daysRemaining} días antes de la expiración maquina: ${machine.id_maquina} - ${machine.nomMaquina}.`);
-             body.push(`${machine.id_maquina} - ${machine.nomMaquina}: ${daysRemaining} días antes de la expiración`)
-         }
-    });
+            if (daysRemaining <= 15 && daysRemaining >= 0) {
+                console.log(`Quedan ${daysRemaining} días antes de la expiración maquina: ${machine.id_maquina} - ${machine.nomMaquina}.`);
+                body.push(`${machine.id_maquina} - ${machine.nomMaquina}: ${daysRemaining} días antes de la expiración`);
+            }
+        });
 
-    const arrayAsString = body.join('\n');
+        if (body.length === 0) {
+            return res.status(200).json({ ok: true, msg: "No hay máquinas próximas a expirar." });
+        }
 
-    const response = await transporter.sendMail({
-        from: `Leonardo Heredia omen_scorpio123@hotmail.com`,
-        to: ["leonardo_heredia123@hotmail.com"],
-        subject: "Test Alertas Maquinas por expirar",
-        text: `${arrayAsString}`
-     });
+        const arrayAsString = body.join('\n');
 
-     console.log(response);
-     res.status(200).json({ok: true, msg: "Mensaje enviado con exito.!"})
+        await transporter.sendMail({
+            from: 'eolivas@edigitalsolutions.com.mx',  // Solo el correo sin nombre
+            to: ["eolivas2212@hotmail.com"],
+            subject: "Alerta Máquinas por Expirar",
+            text: `${arrayAsString}`
+        });
+        
 
-}
+        console.log("✅ Correo enviado con éxito.");
+        res.status(200).json({ ok: true, msg: "Mensaje enviado con éxito." });
+    } catch (error) {
+        console.error("❌ Error al enviar el correo:", error);
+        res.status(500).json({ ok: false, msg: "No se pudo enviar el correo. Intente más tarde." });
+    }
+};
 
 function isWeekday(date: Date) {
     const day = date.getDay();
@@ -55,9 +64,8 @@ function calculateDaysRemaining(expirationDate: number | Date) {
     const currentDate = new Date();
     let daysRemaining = 0;
 
-    // Iterar hacia adelante para encontrar los próximos días hábiles
     while (currentDate < expirationDate && daysRemaining <= 7) {
-        currentDate.setDate(currentDate.getDate() + 1); // Avanzar al siguiente día
+        currentDate.setDate(currentDate.getDate() + 1);
         if (isWeekday(currentDate)) {
             daysRemaining++;
         }
@@ -66,40 +74,52 @@ function calculateDaysRemaining(expirationDate: number | Date) {
     return daysRemaining;
 }
 
-// Automatic Task to send mail at 7:00am excludes sat and sun
-cron.schedule('0 7 * * 1-5', async() => {
-    SendMail();
-})
+// Automatic Task to send mail at 7:00am excludes Sat and Sun
+cron.schedule('0 7 * * 1-5', async () => {
+    await SendMail();
+});
 
 async function SendMail() {
-    logger.verbose('[Machine, cron send mail]')
-    // lectura de base de datos para obtener las maquinas
-    const [total, machines] = await Promise.all([
-        Calibration.countDocuments({ status: true }),
-        Calibration.find({ status: true })
-    ]);
-    let body: string[] = [];
+    try {
+        logger.verbose('[Machine, cron send mail]');
 
-    machines.forEach(machine => {
-        const expirationDate = machine.expira;
-        const daysRemaining = calculateDaysRemaining(expirationDate);
+        const [total, machines] = await Promise.all([
+            Calibration.countDocuments({ status: true }),
+            Calibration.find({ status: true })
+        ]);
 
-         if (daysRemaining <= 7 && daysRemaining >= 0) {
-             console.log(`Quedan ${daysRemaining} días antes de la expiración maquina: ${machine.id_maquina} - ${machine.nomMaquina}.`);
-             body.push(`${machine.id_maquina} - ${machine.nomMaquina}: ${daysRemaining} días antes de la expiración`)
-         }
-    });
+        let body: string[] = [];
 
-    const arrayAsString = body.join('\n');
+        machines.forEach((machine: { expira: any; id_maquina: any; nomMaquina: any; }) => {
+            const expirationDate = machine.expira;
+            const daysRemaining = calculateDaysRemaining(expirationDate);
 
-    const response = await transporter.sendMail({
-        from: `Test Machines omen_scorpio123@hotmail.com`,
-        to: ["leonardo_heredia123@hotmail.com"],
-        subject: "Alertas Maquinas por expirar - Atención",
-        text: `${arrayAsString}`
-     });
+            if (daysRemaining <= 15 && daysRemaining >= 0) {
+                console.log(`Quedan ${daysRemaining} días antes de la expiración maquina: ${machine.id_maquina} - ${machine.nomMaquina}.`);
+                body.push(`${machine.id_maquina} - ${machine.nomMaquina}: ${daysRemaining} días antes de la expiración`);
+            }
+        });
 
-     console.log(response);
+        if (body.length === 0) {
+            console.log("✅ No hay máquinas próximas a expirar.");
+            return;
+        }
+
+        const arrayAsString = body.join('\n');
+
+        await transporter.sendMail({
+            from: 'eolivas@edigitalsolutions.com.mx',  // Solo el correo sin nombre
+            to: ["eolivas2212@hotmail.com"],
+            subject: "Alerta Máquinas por Expirar",
+            text: `${arrayAsString}`
+        });
+        
+
+        console.log("✅ Correo de alerta enviado con éxito.");
+    } catch (error) {
+        console.error("❌ Error al enviar el correo desde cron job:", error);
+    }
 }
 
 export default checkExpirationDate;
+//SendMail(); // Manually trigger email sending
