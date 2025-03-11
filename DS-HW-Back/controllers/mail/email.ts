@@ -76,7 +76,12 @@ function calculateDaysRemaining(expirationDate: number | Date) {
 
 // Automatic Task to send mail at 7:00am excludes Sat and Sun
 cron.schedule('0 7 * * 1-5', async () => {
-    await SendMail();
+    try {
+        await SendMail();
+        console.log('Mail sent successfully at 7:00 AM.');
+    } catch (error) {
+        console.error('Error sending mail:', error);
+    }
 });
 
 async function SendMail() {
