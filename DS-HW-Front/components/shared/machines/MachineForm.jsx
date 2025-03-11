@@ -14,19 +14,92 @@ const MachineForm = (props) => {
     dayjs.extend(utc)
     const { setShow } = props;
     const dispatch = useDispatch();
-    const { register, formState: { errors }, handleSubmit } = useForm();
+    const { register, setError, formState: { errors }, handleSubmit } = useForm();
 
-    const processData = async (data) => {
+
+    
+    const checkDuplicate = async (field, value) => {
+        const res = await fetch('http://localhost:8010/machineCalibration/check-duplicate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ field, value })
+        });
+    
+        if (!res.ok) {
+            console.error("❌ Duplicate check request failed:", res.status);
+            return false;
+        }
+    
+        const result = await res.json();
+        console.log("🔁 Result from backend:", result);
+        return result.exists;
+    };
+    
+    
+    
+     /*const processData = async (data) => {
               
         await dispatch(createMachineAction(data))
         console.log(data);
         
         setShow(false);
-    }
+    } Working code 11032025 */
+    const processData = async (data) => {
+        alert("🚀 processData called");
+    
+        try {
+            console.log("✅ data received:", data);
+    
+            if (!data) {
+                alert("❌ No data received in processData!");
+                return;
+            }
+    
+            const serial = data.serial;
+            const id = data.id_maquina;
+    
+            console.log("🔎 Checking serial:", serial);
+            console.log("🔎 Checking ID:", id);
+    
+            const duplicateSerial = await checkDuplicate('serial', serial);
+            console.log("🧪 duplicateSerial?", duplicateSerial);
+    
+            const duplicateId = await checkDuplicate('id_maquina', id);
+            console.log("🧪 duplicateId?", duplicateId);
+    
+            if (duplicateSerial) {
+                setError("serial", {
+                    type: "manual",
+                    message: `Ya existe una máquina con el serial "${serial}"`
+                });
+                return;
+            }
+            
+            if (duplicateId) {
+                setError("id_maquina", {
+                    type: "manual",
+                    message: `Ya existe una máquina con el ID "${id}"`
+                });
+                return;
+            }
+            
+    
+            await dispatch(createMachineAction(data));
+            setShow(false);
+        } catch (error) {
+            console.error("❌ processData threw an error:", error);
+            alert("❌ Ocurrió un error al validar duplicados.");
+        }
+    };
+    
+    
+  
 
     return (
         <div className='mx-2'>
-            <form onSubmit={handleSubmit(processData)}>
+           <form onSubmit={handleSubmit(processData)}>
                 <div className="mb-3">
                     <Required />
                 </div>
@@ -48,9 +121,7 @@ const MachineForm = (props) => {
                         <input name="cargar_certificado" 
                             type="file" 
                             className='form-control my-2' 
-                            {...register("certificado", { 
-                                required: { value: true, message: 'El archivo es obligatorio' } 
-                            })} 
+                            {...register("cargar_certificado")} 
                         />
                         {/* Mensaje de error */}
                         <span className='text-danger text-small d-block mb-2'>
@@ -183,7 +254,7 @@ const MachineForm = (props) => {
                     -foto etiqueta
                     -certificado pdf */}
                 </div>
-                <CreateButtons />
+                <CreateButtons /> 
             </form>
         </div>
     )

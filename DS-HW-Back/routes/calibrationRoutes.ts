@@ -16,6 +16,7 @@ import { createMachineController, deleteMachineController, getMachineController,
         getMachineGuestImgController, getMachineGuestTagController } from '@machinecontrollers'
 import { checkExpirationDate } from '@mailcontrollers'
 import { qrcode } from '@qrcodecontrollers'
+import { Calibration } from '@models';
 
 type PermissionOptions = 'createPermissions' | 'readPermissions' | 'updatePermissions' | 'deletePermissions'
 const maxSize = 20 * 1024 * 1024
@@ -33,7 +34,7 @@ const router = Router();
 router.post('/', [
     jwtValidation,
     permission(createPermissions as PermissionOptions, machines),
-    uploadFile.fields([{name: 'foto_equipo'},{name: 'foto_etiqueta_calibracion'}]),
+    uploadFile.fields([{name: 'foto_equipo'},{name: 'foto_etiqueta_calibracion'},{ name: 'cargar_certificado', maxCount: 1 }]),
     validationFields
 ] as RequestHandler[], createMachineController);
 
@@ -102,7 +103,7 @@ router.get('/guest/qr/id/:id_maquina', [
 router.put('/updatebyadmin/:id', [
     jwtValidation,
     permission(updatePermissions as PermissionOptions, machines),
-    uploadFile.fields([{name: 'foto_equipo'},{name: 'foto_etiqueta_calibracion'}]),
+    uploadFile.fields([{name: 'foto_equipo'},{name: 'foto_etiqueta_calibracion'},{ name: 'cargar_certificado', maxCount: 1 }]),
     validationFields
 ] as RequestHandler[], updateMachineController);
 
@@ -113,6 +114,23 @@ router.delete('/deletebyadmin/:id', [
     permission(readPermissions as PermissionOptions, machines),
     validationFields
 ] as RequestHandler[], deleteMachineController);
+
+// ✅ Add this route
+router.post('/check-duplicate', async (req, res) => {
+    const { field, value } = req.body;
+
+    if (!field || !value) {
+        return res.status(400).json({ success: false, message: 'Field and value are required' });
+    }
+
+    try {
+        const exists = await Calibration.exists({ [field]: value });
+        return res.status(200).json({ exists: !!exists }); // ✅ Proper JSON
+    } catch (err) {
+        console.error('[Machine, check-duplicate]', err);
+        return res.status(500).json({ success: false, message: 'Internal server error' }); // ✅ JSON too
+    }
+});
 
 
 export default router;

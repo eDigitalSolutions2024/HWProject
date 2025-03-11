@@ -199,33 +199,42 @@ export async function getMachineTagNoAuth(machineId) {
 // }
 
 export async function createMachineApi(data) {
-    const url = `${envUrl}/machineCalibration`
+    const url = `${envUrl}/machineCalibration`;
     const token = await getToken();
-    const params = {
-        headers: {
-            'Content-Type': 'application/json',
-            xtoken: token
-        }
-    }
 
+    // Convert `data` into `FormData`
     const formData = new FormData();
     for (let key in data) {
         if (data.hasOwnProperty(key)) {
-          formData.append(key, data[key]);
+            if (key === "cargar_certificado" && data[key]?.[0]) {
+                // Append the file correctly
+                formData.append(key, data[key][0]); 
+            } else {
+                formData.append(key, data[key]);
+            }
         }
-      }
+    }
 
-    console.log('creat machine api form data', formData);
+    console.log('createMachineApi formData:', formData);
 
-    return axios.post(url, data, params)
+    // Set up headers (do not manually set Content-Type for FormData)
+    const params = {
+        headers: {
+            xtoken: token
+        }
+    };
+
+    return axios.post(url, formData, params)
         .then(response => {
-            console.log('create machine api response ', response);
+            console.log('create machine api response:', response);
             return response.data;
         })
         .catch(err => {
+            console.error('Error in createMachineApi:', err);
             return err;
-        })
+        });
 }
+
 
 export async function updateMachineByAdminApi(data) {
     const url = `${envUrl}/machineCalibration/updatebyadmin/${data._id}`

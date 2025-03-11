@@ -14,83 +14,85 @@ interface RequestBody extends Request {
 
 const createMachineController = async (req: RequestBody, res: Response) => {
     logger.verbose('[Machines, createMachineController]', `User:${req?.user?.email} Add new Machine`);
+
     let attachment1;
     let attachment2;
-    let attachment3; 
+    let attachment3;
 
-    //@ts-expect-error
-    const foto_equipo = req?.files?.foto_equipo;
+    const foto_equipo = (req.files as { [fieldname: string]: Express.Multer.File[] })?.foto_equipo;
+    const foto_etiqueta_calibracion = (req.files as { [fieldname: string]: Express.Multer.File[] })?.foto_etiqueta_calibracion;
+    const certificado_file = (req.files as { [fieldname: string]: Express.Multer.File[] })?.cargar_certificado;
 
-    //@ts-expect-error
-    const foto_etiqueta_calibracion = req?.files?.foto_etiqueta_calibracion;
+    const {
+        id_maquina, nomMaquina, serial, manufacturador, seccion,
+        proveedor, type, loc1, loc2, loc3, last_calibration_date,
+        calibration_interval_define, expira, rango_trabajo, comments,
+        liga_certificado
+    } = req.body;
 
-    const cargar_certificado = (req.files as { [fieldname: string]: Express.Multer.File[] })?.cargar_certificado;
-
-    // const {foto_equipo, foto_etiqueta_calibracion} = req.files as Express.Multer.File[]
-    
-    const { id_maquina, nomMaquina, serial, manufacturador, seccion,
-                proveedor, type, loc1, loc2, loc3, last_calibration_date,
-                calibration_interval_define, expira, rango_trabajo, comments,
-                liga_certificado } = req.body;
     try {
-        const dateLastCalibDate = dayjs(last_calibration_date).toDate()
-        const dateExpira = dayjs(expira).toDate()
+        const dateLastCalibDate = dayjs(last_calibration_date).toDate();
+        const dateExpira = dayjs(expira).toDate();
 
-        if(foto_equipo) {
-            const attachmentData = {
-                name: `${foto_equipo[0]?.originalname}`,
+        if (foto_equipo?.[0]) {
+            const file = foto_equipo[0];
+            attachment1 = new Attachment({
+                name: file.originalname,
                 category: 'userAttachment',
-                fileType: foto_equipo[0]?.filename?.split('.')[1],
-                file: foto_equipo[0]?.path,
+                fileType: file.filename.split('.').pop(),
+                file: file.path,
                 createdBy: req?.user?._id
-            }
-            attachment1 = await new Attachment(attachmentData);
+            });
+            await attachment1.save();
         }
-        
-        if(foto_etiqueta_calibracion) {
-            const attachmentData2 = {
-                name: `${foto_etiqueta_calibracion[0]?.originalname}`,
+
+        if (foto_etiqueta_calibracion?.[0]) {
+            const file = foto_etiqueta_calibracion[0];
+            attachment2 = new Attachment({
+                name: file.originalname,
                 category: 'userAttachment',
-                fileType: foto_etiqueta_calibracion[0]?.filename?.split('.')[1],
-                file: foto_etiqueta_calibracion[0]?.path,
+                fileType: file.filename.split('.').pop(),
+                file: file.path,
                 createdBy: req?.user?._id
-            }
-            attachment2 = await new Attachment(attachmentData2);
+            });
+            await attachment2.save();
         }
-        if(cargar_certificado) {
-            const attachmentData3 = {
-                name: `${cargar_certificado}`,
+
+        if (certificado_file?.[0]) {
+            const file = certificado_file[0];
+            attachment3 = new Attachment({
+                name: file.originalname,
                 category: 'userAttachment',
-                fileType: cargar_certificado[0]?.filename?.split('.').pop(),
-                file: cargar_certificado,
+                fileType: file.filename.split('.').pop(),
+                file: file.path,
                 createdBy: req?.user?._id
-            }
-            attachment3 = await new Attachment(attachmentData3);
+            });
+            await attachment3.save();
         }
-        
-        console.log({
-            id_maquina, nomMaquina, serial, manufacturador, seccion, cargar_certificado,
-            proveedor, type, loc1, loc2, loc3, dateLastCalibDate, calibration_interval_define,
-            dateExpira, rango_trabajo, comments, liga_certificado,
-            attachment1_id: attachment1?._id, attachment2_id: attachment2?._id
-          });
-          
-        
-        
 
         const calibration = new Calibration({
-            id_maquina, nomMaquina, serial, manufacturador, seccion, cargar_certificado,
-                proveedor, type, loc1, loc2, loc3, last_calibration_date: dateLastCalibDate,
-                calibration_interval_define, expira: dateExpira, rango_trabajo, comments,
-                liga_certificado,foto_equipo: attachment1?._id ,foto_etiqueta_calibracion: attachment2?._id
-                
+            id_maquina,
+            nomMaquina,
+            serial,
+            manufacturador,
+            seccion,
+            cargar_certificado: attachment3?._id,
+            proveedor,
+            type,
+            loc1,
+            loc2,
+            loc3,
+            last_calibration_date: dateLastCalibDate,
+            calibration_interval_define,
+            expira: dateExpira,
+            rango_trabajo,
+            comments,
+            liga_certificado,
+            foto_equipo: attachment1?._id,
+            foto_etiqueta_calibracion: attachment2?._id
         });
 
-        await attachment1?.save();
-        await attachment2?.save();
-        await attachment3?.save();
         await calibration.save();
-        
 
         const event = {
             date: dayjs().toDate(),
@@ -101,13 +103,16 @@ const createMachineController = async (req: RequestBody, res: Response) => {
             es: `Maquina ${calibration.id_maquina} ${calibration.nomMaquina} Creado`,
             en: `Machine ${calibration.id_maquina} ${calibration.nomMaquina} was created`
         }
+
         logger.info('[Machine, createMachineController] Succesfully')
         await TimeLine.create(event);
+
         return res.json(entityCreate);
     } catch (error) {
-        logger.error('[Machines, createMachineController]', ` User:${req.user.email} `, error)
-        res.json(dataBase)
+        logger.error('[Machines, createMachineController]', ` User:${req.user.email} `, error);
+        return res.json(dataBase);
     }
 }
+
 
 export default createMachineController;
