@@ -106,7 +106,7 @@ const MachineForm = (props) => {
                 <div className='d-flex flex-between w-100'>
                     <div className='d-flex flex-column w-100 me-2'>
                         <label className='input-label me-2'><span className="color-primary h5" >*</span>  Área de negocio:</label>
-                        <select name='areaNegocio' className='form-control my-2' {...register("areaNegocio", { required: { value: true, message: 'El área de negocio es obligatoria' }, minLength: { value: 2, message: "Min lenght 2" } })} >
+                        <select name='loc1' className='form-control my-2' {...register("loc1", { required: { value: true, message: 'El área de negocio es obligatoria' }, minLength: { value: 2, message: "Min lenght 2" } })} >
                             <option>Process Instruments</option>
                             <option>Field Instruments</option>
                             <option>Mercury Instrumets</option>
