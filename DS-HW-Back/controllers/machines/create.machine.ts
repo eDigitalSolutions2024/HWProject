@@ -13,6 +13,7 @@ interface RequestBody extends Request {
 }
 
 const createMachineController = async (req: RequestBody, res: Response) => {
+    
     logger.verbose('[Machines, createMachineController]', `User:${req?.user?.email} Add new Machine`);
 
     let attachment1;

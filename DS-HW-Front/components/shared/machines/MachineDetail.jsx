@@ -15,6 +15,8 @@ import Loading from '@components/shared/Loading'
 import Modal from "@components/shared/Modal"
 import UpdateMachineImageForm from "./UpdateMachineImage"
 import UpdateMachineTagImageForm from "./UpdateMachineImageTag"
+import UpdateMachineCertificado from "./UpdateMachineCertificado"; // ✅ new import
+
 import FileDownload from 'js-file-download'
 
 export default function MachineDetail() {
@@ -27,6 +29,8 @@ export default function MachineDetail() {
   const [isChangeActive, setIsChangeActive] = useState(false)
   const [showUpdateImageMachine, setShowUpdateImageMachine] = useState(false);
   const [showUpdateTagImageMachine, setShowUpdateTagImageMachine] = useState(false);
+  const [showUpdateCertificado, setShowUpdateCertificado] = useState(false);
+
   const isLoading = useSelector(state => state.machine.isLoadingCurrentMachine)
 
   const updateCurrentMachine = () => {
@@ -60,7 +64,7 @@ export default function MachineDetail() {
 
   return (
     <div className='mx-5 mt-3'>
-      <h2 className=''><b>Detalles</b></h2>
+      <h2 className=''><b>Detalles del Equipo</b></h2>
       {isLoading ?
         <Loading /> :
         <Card className='card shadow'>
@@ -86,13 +90,14 @@ export default function MachineDetail() {
             <ListGroup.Item onKeyPress={handleKeyPress} onClick={() => { setCurrentField('Id'); }}>Id Maquina: {currentField === 'Id' ? <input className={isChangeActive ? 'editando' : ''} type='text' name='id_maquina' onChange={(e) => setData(e)} defaultValue={currentMachineState.id_maquina} /> : currentMachineState.id_maquina}</ListGroup.Item>
             <ListGroup.Item onKeyPress={handleKeyPress} onClick={() => { setCurrentField('seccion'); }}>Seccion: {currentField === 'seccion' ? <input className={isChangeActive ? 'editando' : ''} type='text' name='seccion' onChange={(e) => setData(e)} defaultValue={currentMachineState.seccion} /> : currentMachineState.seccion}</ListGroup.Item>
             <ListGroup.Item onKeyPress={handleKeyPress} onClick={() => { setCurrentField('Serial');  }}>Serial: {currentField === 'Serial' ? <input type='text' name='serial' onChange={(e) => setData(e)} defaultValue={currentMachineState.serial} /> : currentMachineState.serial}</ListGroup.Item>
+            <ListGroup.Item onKeyPress={handleKeyPress} onClick={() => { setCurrentField('liga_certificado');  }}>Liga Certificado: {currentField === 'liga_certificado' ? <input type='text' name='liga_certificado' onChange={(e) => setData(e)} defaultValue={currentMachineState.liga_certificado} /> : currentMachineState.liga_certificado}</ListGroup.Item>
             <ListGroup.Item onKeyPress={handleKeyPress} onClick={() => { setCurrentField('Manufacturador');  }}>Manufacturador: {currentField === 'Manufacturador' ? <input type='text' name='manufacturador' onChange={(e) => setData(e)} defaultValue={currentMachineState.manufacturador} /> : currentMachineState.manufacturador}</ListGroup.Item>
             <ListGroup.Item onKeyPress={handleKeyPress} onClick={() => { setCurrentField('Proveedor');  }}>Proveedor: {currentField === 'Proveedor' ? <input type='text' name='proveedor' onChange={(e) => setData(e)} defaultValue={currentMachineState.proveedor} /> : currentMachineState.proveedor}</ListGroup.Item>
             <ListGroup.Item>Activo: <div className="form-check form-switch"><input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" name='activo' onChange={(e) => { ; setCurrentMachineState({ ...currentMachineState, status: !currentMachineState?.status }) }} checked={Boolean(currentMachineState?.status)} /></div> </ListGroup.Item>
             <ListGroup.Item onKeyPress={handleKeyPress} onClick={() => { setCurrentField('Type');  }}>Type: {currentField === 'Type' ? <input type='text' name='type' onChange={(e) => setData(e)} defaultValue={currentMachineState.type} /> : currentMachineState.type}</ListGroup.Item>
-            <ListGroup.Item onKeyPress={handleKeyPress} onClick={() => { setCurrentField('Loc1');  }}>Loc 1: {currentField === 'Loc1' ? <input type='text' name='loc1' onChange={(e) => setData(e)} defaultValue={currentMachineState.loc1} /> : currentMachineState.loc1}</ListGroup.Item>
-            <ListGroup.Item onKeyPress={handleKeyPress} onClick={() => { setCurrentField('Loc2');  }}>Loc 2: {currentField === 'Loc2' ? <input type='text' name='loc2' onChange={(e) => setData(e)} defaultValue={currentMachineState.loc2} /> : currentMachineState.loc2}</ListGroup.Item>
-            <ListGroup.Item onKeyPress={handleKeyPress} onClick={() => { setCurrentField('Loc3');  }}>Loc 3: {currentField === 'Loc3' ? <input type='text' name='loc3' onChange={(e) => setData(e)} defaultValue={currentMachineState.loc3} /> : currentMachineState.loc3}</ListGroup.Item>
+            <ListGroup.Item onKeyPress={handleKeyPress} onClick={() => { setCurrentField('Loc1');  }}>Unidad de Negocio: {currentField === 'Loc1' ? <input type='text' name='loc1' onChange={(e) => setData(e)} defaultValue={currentMachineState.loc1} /> : currentMachineState.loc1}</ListGroup.Item>
+            <ListGroup.Item onKeyPress={handleKeyPress} onClick={() => { setCurrentField('Loc2');  }}>Area de producción: {currentField === 'Loc2' ? <input type='text' name='loc2' onChange={(e) => setData(e)} defaultValue={currentMachineState.loc2} /> : currentMachineState.loc2}</ListGroup.Item>
+            <ListGroup.Item onKeyPress={handleKeyPress} onClick={() => { setCurrentField('Loc3');  }}>Estación: {currentField === 'Loc3' ? <input type='text' name='loc3' onChange={(e) => setData(e)} defaultValue={currentMachineState.loc3} /> : currentMachineState.loc3}</ListGroup.Item>
             <ListGroup.Item onKeyPress={handleKeyPress} onClick={() => { setCurrentField('Last_calib');  }}>Última fecha calibración: <strong><u>{currentField === 'Last_calib' ? <input type='date' max={dayjs().utc().format('YYYY-MM-DD')} name='last_calibration_date' onChange={(e) => setData(e)} defaultValue={dayjs(currentMachineState?.last_calibration_date).utc().format('YYYY-MM-DD')} /> : dayjs(currentMachineState?.last_calibration_date).format("DD MMM YYYY")}</u></strong></ListGroup.Item>
             <ListGroup.Item onKeyPress={handleKeyPress} onClick={() => { setCurrentField('Expira');  }}>Expira: <strong><u>{currentField === 'Expira' ? <input type='date' min={dayjs().utc().format('YYYY-MM-DD')} name='expira' onChange={(e) => setData(e)} defaultValue={dayjs(currentMachineState?.expira).utc().format('YYYY-MM-DD')} /> : dayjs(currentMachineState?.expira).format("DD MMM YYYY")}</u></strong></ListGroup.Item>
             <ListGroup.Item onKeyPress={handleKeyPress} onClick={() => { setCurrentField('Interval');  }}>Intervalo tiempo calibración: {currentField === 'Interval' ? <input type='text' name='calibration_interval_define' onChange={(e) => setData(e)} defaultValue={currentMachineState.calibration_interval_define} /> : currentMachineState.calibration_interval_define}</ListGroup.Item>
