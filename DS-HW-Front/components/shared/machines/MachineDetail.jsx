@@ -16,8 +16,10 @@ import Modal from "@components/shared/Modal"
 import UpdateMachineImageForm from "./UpdateMachineImage"
 import UpdateMachineTagImageForm from "./UpdateMachineImageTag"
 import UpdateMachineCertificado from "./UpdateMachineCertificado"; // ✅ new import
+import { saveAs } from "file-saver";//nuevo import parq descragar el certificado
 
 import FileDownload from 'js-file-download'
+
 
 export default function MachineDetail() {
   dayjs.extend(utc)
@@ -55,13 +57,13 @@ export default function MachineDetail() {
       FileDownload(response, `${currentMachine?.nomMaquina}.png`);
     })
   }
-
+  
   useEffect(() => {
     setCurrentMachineState(currentMachine)
     setIsChangeActive(false)
   }, [currentMachine])
   console.log("Certificado URL:", currentMachine?.cargar_certificado);
-
+  
 
   return (
     <div className='mx-5 mt-3'>
@@ -110,11 +112,11 @@ export default function MachineDetail() {
             <ListGroup.Item>
                   <div className="d-flex align-items-center flex-wrap">
                     <strong className="me-2">Certificado:</strong>
-
-                    {currentMachine?.cargar_certificado ? (
+              
+                    {currentMachine?.nomMaquina? (
                       <a
-                        href={currentMachine.cargar_certificado}
-                        target="_blank"
+                        href={currentMachine.cargar_certificado} // Usamos la URL del archivo
+                        target="_blank" // Abre en una nueva pestaña
                         rel="noopener noreferrer"
                         className="btn btn-sm btn-outline-primary me-2 mb-2"
                       >
@@ -123,7 +125,6 @@ export default function MachineDetail() {
                     ) : (
                       <span className="text-muted me-3 mb-2">No disponible</span>
                     )}
-
                     <button
                       className="btn btn-sm btn-secondary mb-2"
                       onClick={() => setShowUpdateCertificado(true)}

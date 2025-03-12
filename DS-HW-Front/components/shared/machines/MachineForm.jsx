@@ -129,8 +129,8 @@ const MachineForm = (props) => {
                         </span>
                     </div>
                     <div className='d-flex flex-column w-100 ms-2'>
-                        <label className='input-label'><span className="color-primary h5">*</span>  Liga Certificado</label>
-                        <input name='liga_certificado' type="text" placeholder='Liga de Certificado' className='form-control my-2' {...register("liga_certificado", { required: { value: true, message: 'El Liga de certificado es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
+                        <label className='input-label'><span className="color-primary h5"></span>  Liga Certificado</label>
+                        <input name='liga_certificado' type="text" placeholder='Liga de Certificado' className='form-control my-2' {...register("liga_certificado")}/>
                         <span className='text-danger text-small d-block mb-2'>{errors?.liga_certificado?.message}</span>
                     </div>
                 </div>
