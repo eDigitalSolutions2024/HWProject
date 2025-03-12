@@ -212,7 +212,18 @@ const MachineForm = (props) => {
 
                     <div className='d-flex flex-column w-100 ms-2'>
                         <label className='input-label'><span className="color-primary h5">*</span>  Intervalo de calibración</label>
-                        <input name='calibration_interval_define' type="text" placeholder='Intervalo de calibración' className='form-control my-2' {...register("calibration_interval_define", { required: { value: true, message: 'El Intervalo de calibración es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
+                        <input
+    name='calibration_interval_define'
+    type="text"
+    placeholder='Intervalo de calibración'
+    className='form-control my-2'
+    onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')}
+    {...register("calibration_interval_define", {
+        required: { value: true, message: 'El Intervalo de calibración es obligatorio' },
+    })}
+/>
+
+
                         <span className='text-danger text-small d-block mb-2'>{errors?.calibration_interval_define?.message}</span>
                     </div>
 

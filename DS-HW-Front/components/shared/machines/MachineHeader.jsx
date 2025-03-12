@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getUserListAction } from "@userActions"
 
 import Modal from '../../shared/Modal'
+
 const MachineHeader = () => {
 
     const dispatch = useDispatch();
@@ -19,17 +20,28 @@ const MachineHeader = () => {
 
     return (
         <>
-            <div className='mb-4'>
+           <div className='mb-0'>
                 <div className='d-flex flex-column'>
                     <div className='d-flex flex-between'>
                         <h2><b></b>Maquinas</h2>
-                        <button className='btn btn-action-primary' onClick={() => setShow(!show)}>Nueva Maquina</button>
                     </div>
                 </div>
+
+                {/* Floating Action Button */}
+                <button 
+                    className="fab-button"
+                    onClick={() => setShow(!show)}
+                    title="Agregar nueva máquina"
+                >
+                    +
+                </button>
+
+                {/* Modal stays the same */}
+                <Modal title="Nueva Maquina" show={show} setShow={setShow}>
+                    <MachineForm setShow={setShow} />
+                </Modal>
             </div>
-            <Modal title="Nueva Maquina" show={show} setShow={setShow}>
-                <MachineForm setShow={setShow} />
-            </Modal>
+
         </>
     )
 }

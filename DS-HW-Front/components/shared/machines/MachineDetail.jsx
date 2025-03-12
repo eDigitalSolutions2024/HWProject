@@ -60,6 +60,7 @@ export default function MachineDetail() {
     setCurrentMachineState(currentMachine)
     setIsChangeActive(false)
   }, [currentMachine])
+  console.log("Certificado URL:", currentMachine?.cargar_certificado);
 
 
   return (
@@ -81,6 +82,10 @@ export default function MachineDetail() {
             <Modal title={'Actualizar Foto Etiqueta'} onKeyPress={handleKeyPress} show={showUpdateTagImageMachine} setShow={setShowUpdateTagImageMachine} >
               <UpdateMachineTagImageForm setShow={setShowUpdateTagImageMachine} />
             </Modal>
+            <Modal title={'Actualizar Certificado'} show={showUpdateCertificado} setShow={setShowUpdateCertificado}>
+              <UpdateMachineCertificado setShow={setShowUpdateCertificado} />
+            </Modal>
+
           </div>
           <Card.Body>
             <Card.Title onKeyPress={handleKeyPress} onClick={() => { setCurrentField('Nombre');  }}>Nombre Maquina: <strong>{currentField === 'Nombre' ? <input type='text' name='nomMaquina' onChange={(e) => setData(e)} defaultValue={currentMachineState.nomMaquina} /> : currentMachineState.nomMaquina}</strong></Card.Title>
@@ -102,6 +107,31 @@ export default function MachineDetail() {
             <ListGroup.Item onKeyPress={handleKeyPress} onClick={() => { setCurrentField('Expira');  }}>Expira: <strong><u>{currentField === 'Expira' ? <input type='date' min={dayjs().utc().format('YYYY-MM-DD')} name='expira' onChange={(e) => setData(e)} defaultValue={dayjs(currentMachineState?.expira).utc().format('YYYY-MM-DD')} /> : dayjs(currentMachineState?.expira).format("DD MMM YYYY")}</u></strong></ListGroup.Item>
             <ListGroup.Item onKeyPress={handleKeyPress} onClick={() => { setCurrentField('Interval');  }}>Intervalo tiempo calibración: {currentField === 'Interval' ? <input type='text' name='calibration_interval_define' onChange={(e) => setData(e)} defaultValue={currentMachineState.calibration_interval_define} /> : currentMachineState.calibration_interval_define}</ListGroup.Item>
             <ListGroup.Item onKeyPress={handleKeyPress} onClick={() => { setCurrentField('Range');  }}>Rango de Trabajo: {currentField === 'Range' ? <input type='text' name='rango_trabajo' onChange={(e) => setData(e)} defaultValue={currentMachineState.rango_trabajo} /> : currentMachineState.rango_trabajo}</ListGroup.Item>
+            <ListGroup.Item>
+                  <div className="d-flex align-items-center flex-wrap">
+                    <strong className="me-2">Certificado:</strong>
+
+                    {currentMachine?.cargar_certificado ? (
+                      <a
+                        href={currentMachine.cargar_certificado}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-sm btn-outline-primary me-2 mb-2"
+                      >
+                        Descargar Certificado
+                      </a>
+                    ) : (
+                      <span className="text-muted me-3 mb-2">No disponible</span>
+                    )}
+
+                    <button
+                      className="btn btn-sm btn-secondary mb-2"
+                      onClick={() => setShowUpdateCertificado(true)}
+                    >
+                      Actualizar Certificado
+                    </button>
+                  </div>
+                </ListGroup.Item>
           </ListGroup>
         </Card>
 
