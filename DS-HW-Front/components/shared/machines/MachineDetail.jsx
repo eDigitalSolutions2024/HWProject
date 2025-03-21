@@ -113,9 +113,9 @@ export default function MachineDetail() {
                   <div className="d-flex align-items-center flex-wrap">
                     <strong className="me-2">Certificado:</strong>
               
-                    {currentMachine?.nomMaquina? (
+                    {currentMachine?.cargar_certificado? (
                       <a
-                        href={currentMachine.cargar_certificado} // Usamos la URL del archivo
+                        href={currentMachine._id} // Usamos la URL del archivo
                         target="_blank" // Abre en una nueva pestaña
                         rel="noopener noreferrer"
                         className="btn btn-sm btn-outline-primary me-2 mb-2"

@@ -62,6 +62,7 @@ export default function AllMachinesList() {
             'Fecha Calibración': dayjs(machine.last_calibration_date).format("YYYY-MM-DD"),
             'Expira': dayjs(machine.expira).format("YYYY-MM-DD"),
             'Estatus': machine.status ? 'Activo' : 'Inactivo',
+            'Seccion': machine.seccion,//apartado de seccion para exportat a excell
         })));
 
         const workbook = XLSX.utils.book_new();
@@ -84,6 +85,19 @@ export default function AllMachinesList() {
                 />
 
                     <div className='d-flex flex-wrap justify-content-end align-items-end gap-3 mb-3'>
+
+                        <div>
+                            <label>Seccion</label>
+                            <select
+                                name = 'seccion'
+                                className = 'form-control my 1'
+                                value = {filters.seccion}
+                                onChange = {(e) => setFilters({ ...filters, seccion: e.target.value})}>
+                                <option value = "">Todas</option>
+                                <option value = "seccion">Interna</option>
+                                <option value = "seccion">Externa</option>
+                            </select>
+                        </div>
 
                         <div>
                             <label>Fecha Calibración Desde</label>
