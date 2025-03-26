@@ -73,8 +73,14 @@ export default function AllMachinesList() {
         saveAs(file, 'maquinas.xlsx');
     };
 
-    return (
-        <div className="card p-4 shadow-sm border-0 rounded-4">
+
+    return ( 
+    <div className="card p-4 shadow-sm border-0 rounded -4">
+        <div class = "d-flex gap-2 mb-3">
+            <button class ="btn btn-light rounded-pill px-4 py-2 shadow-sm" onclick="openTab(event, 'Interna')">Interna</button>
+            <button class ="btn btn-light rounded-pill px-4 py-2 shadow-sm" onclick="openTab(event, 'Externa')">Externa</button>
+        </div>
+        <div className="card p-4 shadow-sm border-0 rounded -5">
             <div className='mb-3'>
                 <input
                     type="text"
@@ -177,6 +183,6 @@ export default function AllMachinesList() {
             ) : (
                 <NoDataFound className="mt-5" />
             )}
-        </div>
+    </div>   </div>
     );
 }

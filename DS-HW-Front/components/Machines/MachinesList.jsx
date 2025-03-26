@@ -30,6 +30,7 @@ export default function MachinesList() {
                         <thead>
                             <tr>
                                 <th className='table-header'>Id Maquina</th>
+                                <th className='table-header'>Seccion</th>
                                 <th className='table-header'>Nombre Maquina</th>
                                 <th className='table-header'>Serial</th>
                                 <th className='table-header'>Proveedor</th>
@@ -47,6 +48,7 @@ export default function MachinesList() {
                                     <tr key={index} >
                                         
                                         <td onClick={() => { router.push(`/machine/${data._id}`)}} className='pointer'> <u>{data?.id_maquina}</u></td>
+                                        <td>{data?.seccion}</td>
                                         <td>{data?.nomMaquina}</td>
                                         <td>{data?.serial}</td>
                                         <td>{data?.proveedor}</td>
