@@ -51,7 +51,31 @@ export default function MachineDetail() {
       
     }
   }
-
+  const downloadCertificado = () => {
+    if (!currentMachine?.cargar_certificado) {
+      console.warn("No hay certificado para descargar.");
+      return;
+    }
+  
+    const API_BASE = process.env.NODE_ENV === 'development'
+      ? 'http://localhost:8010' // 👈 el puerto correcto del backend
+      : 'https://tuproduccion.com'; // si tienes uno
+  
+    fetch(`${API_BASE}/api/attachments/${currentMachine.cargar_certificado}/download`)
+      .then((res) => {
+        if (!res.ok) throw new Error("No se pudo descargar el certificado");
+        return res.blob();
+      })
+      .then((blob) => {
+        saveAs(blob, `certificado-${currentMachine.nomMaquina}.pdf`);
+      })
+      .catch((err) => {
+        console.error("Error al descargar el certificado:", err);
+      });
+  };
+  
+  
+   
   const downloadImage = () => {
     generateQR(currentMachine?._id).then(response => {
       FileDownload(response, `${currentMachine?.nomMaquina}.png`);
@@ -113,18 +137,17 @@ export default function MachineDetail() {
                   <div className="d-flex align-items-center flex-wrap">
                     <strong className="me-2">Certificado:</strong>
               
-                    {currentMachine?.cargar_certificado? (
-                      <a
-                        href={currentMachine._id} // Usamos la URL del archivo
-                        target="_blank" // Abre en una nueva pestaña
-                        rel="noopener noreferrer"
+                    {currentMachine?.cargar_certificado ? (
+                      <button
                         className="btn btn-sm btn-outline-primary me-2 mb-2"
+                        onClick={downloadCertificado}
                       >
                         Descargar Certificado
-                      </a>
+                      </button>
                     ) : (
                       <span className="text-muted me-3 mb-2">No disponible</span>
                     )}
+
                     <button
                       className="btn btn-sm btn-secondary mb-2"
                       onClick={() => setShowUpdateCertificado(true)}

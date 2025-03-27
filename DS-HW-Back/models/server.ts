@@ -12,10 +12,11 @@ class Server {
         auth: '/auth',
         user: '/user',
         role: '/role',
-        attachment: '/attachment',
+        attachment: '/api/attachments', // 👈 CAMBIADO AQUÍ
         transportType: '/transport-type',
         machines: '/machineCalibration'
     }
+    
 
     constructor() {
         this.app = express.default();
