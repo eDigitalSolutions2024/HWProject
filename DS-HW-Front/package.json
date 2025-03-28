@@ -20,6 +20,7 @@
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.13",
     "file-saver": "^2.0.5",
+    "framer-motion": "^12.6.2",
     "Honeywell-admin-web": "file:",
     "js-cookie": "^3.0.5",
     "js-file-download": "^0.4.12",

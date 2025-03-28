@@ -2,7 +2,7 @@ import { Application } from 'express'
 import * as express from "express";
 import cors from 'cors'
 import logger from '@logger'
-import { userRoutes, roleRoutes, authRoutes, attachmentRoutes, transportTypeRoutes, calibrationRoutes } from 'routes'
+import { userRoutes, roleRoutes, authRoutes, attachmentRoutes, transportTypeRoutes, calibrationRoutes, folderRoutes } from 'routes'
 import { connection, disconnect } from '../database/config'
 
 class Server {
@@ -14,7 +14,8 @@ class Server {
         role: '/role',
         attachment: '/api/attachments', // 👈 CAMBIADO AQUÍ
         transportType: '/transport-type',
-        machines: '/machineCalibration'
+        machines: '/machineCalibration',
+        folders: '/api/folders' 
     }
     
 
@@ -56,6 +57,8 @@ class Server {
         this.app.use(this.paths.attachment, attachmentRoutes)
         this.app.use(this.paths.transportType, transportTypeRoutes)
         this.app.use(this.paths.machines, calibrationRoutes)
+        this.app.use(this.paths.folders, folderRoutes); // ✅ MONTA LA RUTA
+
     }
 
     listen() {

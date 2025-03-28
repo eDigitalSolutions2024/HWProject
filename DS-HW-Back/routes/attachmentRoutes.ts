@@ -1,13 +1,18 @@
-import { Router, RequestHandler } from 'express';
+import { Router } from 'express';
 import { param } from 'express-validator';
 import { validationFields } from '@middlewares/validation-fields';
 import downloadAttachmentController from '../controllers/attachments/download.attachment';
+import { getFilesByFolderController } from '../controllers/attachments';
+
 
 const router = Router();
 
 router.get('/:fileId/download', [
   param('fileId', 'El ID del archivo es requerido').isMongoId().notEmpty(),
   validationFields,
-] as RequestHandler[], downloadAttachmentController);
+], downloadAttachmentController);
+
+// NUEVA RUTA
+router.get('/folder/:folderId', getFilesByFolderController); // 👈 esta es la que faltaba
 
 export default router;
