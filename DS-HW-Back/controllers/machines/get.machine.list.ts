@@ -22,25 +22,38 @@ interface RequestBody extends Request {
  */
 
 const listMachineController = async (req: RequestBody, res: Response) => {
-    logger.verbose('[Machine, listMachineController]', `User:${req.user.email} action:Get Machine List`)
-    let page = req.query.page || 1;
-    const { limit = 1000, search = "", role = "" } = req.query;
-    let query = []
-    page = Number(page) - 1;
-    const since = page * 1000;
+    logger.verbose('[Machine, listMachineController]', `User:${req.user.email} action:Get Machine List`);
 
-    // TODO campos calibration
-    if (search) query.push({ $or: [{ id_maquina: { $regex: `${search}`, $options: 'i' } }, { nomMaquina: { $regex: `${search}`, $options: 'i' } }, { email: { $regex: `${search}`, $options: 'i' } }] })
-    
-    query.push({ status: true })
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 1000;
+    const search = req.query.search as string || "";
+
+    const since = (page - 1) * limit;
+
+    let query: any[] = [];
+
+    if (search) {
+        query.push({
+            $or: [
+                { id_maquina: { $regex: search, $options: 'i' } },
+                { nomMaquina: { $regex: search, $options: 'i' } },
+                { email: { $regex: search, $options: 'i' } }
+            ]
+        });
+    }
+
+    query.push({ status: true });
+
     const [total, machine] = await Promise.all([
         Calibration.countDocuments({ $and: query }),
         Calibration.find({ $and: query })
-            .skip(Number(since))
-            .limit(Number(limit))
-    ])
-    logger.info('[Machine, listMachineController] Succesfully')
+            .skip(since)
+            .limit(limit)
+    ]);
+
+    logger.info('[Machine, listMachineController] Successfully retrieved');
     res.json({ total, machine });
-}
+};
+
 
 export default listMachineController;
