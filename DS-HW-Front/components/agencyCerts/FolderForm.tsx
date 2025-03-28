@@ -1,41 +1,48 @@
 // FolderForm.tsx
+'use client';
 import React, { useState } from 'react';
 import axios from 'axios';
 
 interface Props {
-  parentId: string | null;
-  onCreated: () => void;
+  parent: string | null;
+  onFolderCreated: () => void;
 }
 
-const FolderForm = ({ parentId, onCreated }: Props) => {
+const FolderForm = ({ parent, onFolderCreated }: Props) => {
   const [name, setName] = useState('');
+  const [showForm, setShowForm] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) return;
-
     try {
-      await axios.post('/api/folders', { name, parent: parentId });
+      await axios.post('/api/folders', { name, parent });
       setName('');
-      onCreated();
+      setShowForm(false);
+      onFolderCreated();
     } catch (err) {
-      console.error('Error al crear carpeta:', err);
+      console.error('Error creando carpeta:', err);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="d-flex gap-2 mt-3">
-      <input
-        type="text"
-        placeholder="Nombre de la carpeta"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="form-control"
-      />
-      <button className="btn btn-primary" type="submit">
-        Crear
-      </button>
-    </form>
+    <div className="mb-4">
+      {showForm ? (
+        <form onSubmit={handleSubmit} className="d-flex gap-2">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Nombre de la carpeta"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <button type="submit" className="btn btn-success">Crear</button>
+          <button type="button" className="btn btn-dark" onClick={() => setShowForm(false)}>Cancelar</button>
+        </form>
+      ) : (
+        <button className="btn btn-primary" onClick={() => setShowForm(true)}>+ Crear Carpeta</button>
+      )}
+    </div>
   );
 };
 
