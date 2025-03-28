@@ -8,28 +8,29 @@ const uploadAttachmentController = async (req: Request, res: Response) => {
     const { folderId } = req.body;
     const file = req.file;
 
+    console.log('REQ.BODY:', req.body);
+    console.log('REQ.FILE:', req.file);
+
     if (!file || !folderId) {
       return res.status(400).json({ msg: 'Archivo y folderId son requeridos' });
     }
 
-    // 👇 Simulación de ID de usuario para pruebas
-    const createdBy = '64edeb29467d39a9f6e35b2b'; // Reemplaza por el ID real del usuario logueado
-
+    // 👇 Valores forzados por ahora
     const attachment = new Attachment({
-      name: file.originalname,                                // ✅ nombre visible
-      file: file.path,                                         // ✅ path real del archivo en disco
-      fileType: path.extname(file.originalname).slice(1),      // ✅ extensión sin punto
-      category: 'FolderAttachment',                            // ✅ categoría por defecto (ajustable)
-      createdBy,                                               // ✅ ID de usuario (por ahora hardcodeado)
-      folder: folderId                                         // ✅ carpeta a la que pertenece
+      name: file.originalname || 'Archivo sin nombre',
+      file: file.path || 'ruta/desconocida',
+      fileType: path.extname(file.originalname).replace('.', '') || 'desconocido',
+      category: 'FolderAttachment',
+      createdBy: '64edeb29467d39a9f6e35b2b', // <-- Asegúrate que este ID existe
+      folder: folderId
     });
 
     await attachment.save();
 
-    return res.status(201).json({ msg: 'Archivo subido', attachment });
+    return res.status(201).json({ msg: 'Archivo subido correctamente', attachment });
   } catch (err) {
     console.error('Upload error:', err);
-    return res.status(500).json({ msg: 'Error al subir archivo' });
+    return res.status(500).json({ msg: 'Error al subir archivo', error: err });
   }
 };
 
