@@ -223,14 +223,15 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
     >
       <div className="d-flex align-items-center">
         <span className="me-2 fs-5 text-danger">📄</span>
-        <a
+                <a
           href={`/api/attachments/cca/${f._id}/download`}
+          className="text-decoration-none fw-semibold"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-decoration-none text-dark fw-semibold"
         >
           {f.name || f.filename}
         </a>
+
       </div>
       <button className="btn btn-sm btn-outline-danger" onClick={() => handleDeleteFile(f._id)}>
         🗑️

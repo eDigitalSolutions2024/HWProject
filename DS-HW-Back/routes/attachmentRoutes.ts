@@ -7,6 +7,8 @@ import getAttachmentsByFolderCCA from '../controllers/attachments/getAttachments
 import uploadAttachmentCCA from '../controllers/attachments/uploadAttachmentCCA';
 import multer from 'multer';
 import path from 'path';
+import downloadAttachmentCCA from '../controllers/attachments/downloadAttachmentCCA';
+
 
 const storage = multer.diskStorage({
   destination: path.join(__dirname, '../../assets'),
@@ -25,11 +27,14 @@ router.get('/:fileId/download', [
   validationFields,
 ], downloadAttachmentController);
 
+ 
 
 router.get('/cca/:fileId/download', [
   param('fileId', 'El ID del archivo es requerido').isMongoId().notEmpty(),
   validationFields,
-], downloadAttachmentController); // puedes usar el mismo controlador si lee bien desde AttachmentCCA
+], downloadAttachmentCCA); // 🎯 NUEVO CONTROLADOR
+
+
 
 // ✅ Ruta para archivos del sistema anterior (si la usas aún)
 router.get('/legacy/folder/:folderId', getFilesByFolderController);
