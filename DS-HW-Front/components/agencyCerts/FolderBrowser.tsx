@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../../api/axiosInstance';
 import './FolderBrowser.scss';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,9 +13,11 @@ interface Folder {
 
 interface FileItem {
   _id: string;
-  filename: string;
-  path: string;
+  name: string;
+  file: string;
+  filename?: string; // 👈 Opcional
 }
+
 
 interface Props {
   currentFolder: string | null;
@@ -28,6 +30,8 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
   const [showForm, setShowForm] = useState(false);
   const [folderName, setFolderName] = useState('');
   const [file, setFile] = useState<File | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [uploading, setUploading] = useState<boolean>(false);
 
   useEffect(() => {
     fetchFolders();
@@ -37,7 +41,7 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
 
   const fetchFolders = async () => {
     try {
-      const res = await axios.get(`/api/folders/${currentFolder || ''}`);
+      const res = await axiosInstance.get(`/folders/${currentFolder || ''}`);
       setFolders(res.data);
     } catch (err) {
       console.error('Error fetching folders:', err);
@@ -47,7 +51,9 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
 
   const fetchFiles = async () => {
     try {
-      const res = await axios.get(`/api/attachments/folder/${currentFolder}`);
+      console.log('📥 Fetching archivos de folder:', currentFolder);
+      const res = await axiosInstance.get(`/attachments/folder/${currentFolder}`);
+      console.log('📦 Archivos recibidos:', res.data);
       setFiles(res.data);
     } catch (err) {
       console.error('Error fetching files:', err);
@@ -58,7 +64,7 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
   const handleCreateFolder = async () => {
     if (!folderName.trim()) return;
     try {
-      await axios.post('/api/folders', {
+      await axiosInstance.post('/folders', {
         name: folderName,
         parent: currentFolder,
       });
@@ -76,7 +82,7 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
     const confirmed = window.confirm('¿Estás seguro de que deseas eliminar esta carpeta?');
     if (!confirmed) return;
     try {
-      await axios.delete(`/api/folders/${folderId}`);
+      await axiosInstance.delete(`/folders/${folderId}`);
       fetchFolders();
       toast.success('Carpeta eliminada exitosamente');
     } catch (err) {
@@ -87,17 +93,34 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
 
   const handleFileUpload = async () => {
     if (!file || !currentFolder) return;
+
+    console.log('📤 Subiendo archivo a folder:', currentFolder);
+
     const formData = new FormData();
     formData.append('file', file);
     formData.append('folderId', currentFolder);
+
+    setUploading(true);
     try {
-      await axios.post('/api/folders/upload', formData);
+      const res = await axiosInstance.post('/attachments/cca/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        onUploadProgress: (e) => {
+          const progress = Math.round((e.loaded * 100) / (e.total || 1));
+          setUploadProgress(progress);
+        },
+      });
+
+      console.log('✅ Archivo subido:', res.data);
+
       setFile(null);
       fetchFiles();
       toast.success('Archivo subido exitosamente');
     } catch (err) {
       console.error('Error uploading file:', err);
       toast.error('Error al subir archivo');
+    } finally {
+      setUploading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -105,7 +128,7 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
     const confirmed = window.confirm('¿Deseas eliminar este archivo?');
     if (!confirmed) return;
     try {
-      await axios.delete(`/api/folders/file/${fileId}`);
+      await axiosInstance.delete(`/folders/file/${fileId}`);
       fetchFiles();
       toast.success('Archivo eliminado exitosamente');
     } catch (err) {
@@ -170,24 +193,56 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
               type="file"
               className="form-control me-2"
               onChange={(e) => setFile(e.target.files?.[0] || null)}
+              disabled={!currentFolder}
             />
-            <button className="btn btn-primary" onClick={handleFileUpload}>
-              Subir
+            <button className="btn btn-primary" onClick={handleFileUpload} disabled={!currentFolder || uploading}>
+              {uploading ? 'Subiendo...' : 'Subir'}
             </button>
           </div>
 
-          <ul className="list-group">
-            {files.map((f) => (
-              <li key={f._id} className="list-group-item d-flex justify-content-between align-items-center">
-                <a href={`/api/attachments/${f._id}/download`} target="_blank" rel="noopener noreferrer">
-                  {f.filename}
-                </a>
-                <button className="btn btn-sm btn-outline-danger" onClick={() => handleDeleteFile(f._id)}>
-                  🗑️
-                </button>
-              </li>
-            ))}
-          </ul>
+          {uploading && (
+            <div className="progress w-100 mb-3">
+              <div
+                className="progress-bar"
+                role="progressbar"
+                style={{ width: `${uploadProgress}%` }}
+                aria-valuenow={uploadProgress}
+                aria-valuemin={0}
+                aria-valuemax={100}
+              >
+                {uploadProgress}%
+              </div>
+            </div>
+          )}
+
+<div className="file-list">
+  {files.map((f) => (
+    <div
+      key={f._id}
+      className="file-item d-flex justify-content-between align-items-center p-3 mb-2 bg-light border rounded shadow-sm animate-fade-in"
+    >
+      <div className="d-flex align-items-center">
+        <span className="me-2 fs-5 text-danger">📄</span>
+        <a
+          href={`/api/attachments/cca/${f._id}/download`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-decoration-none text-dark fw-semibold"
+        >
+          {f.name || f.filename}
+        </a>
+      </div>
+      <button className="btn btn-sm btn-outline-danger" onClick={() => handleDeleteFile(f._id)}>
+        🗑️
+      </button>
+    </div>
+  ))}
+</div>
+
+
+          {files.length === 0 && !uploading && (
+            <div className="text-muted text-center mt-3">📭 No hay archivos en esta carpeta</div>
+          )}
         </div>
       )}
     </div>

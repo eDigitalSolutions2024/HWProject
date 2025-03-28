@@ -1,36 +1,60 @@
 import { Request, Response } from 'express';
 import { Attachment } from '@models';
-import fs from 'fs';
 import path from 'path';
+import { User as UserInterface } from '@interfaces/models/user';
 
-const uploadAttachmentController = async (req: Request, res: Response) => {
+type CustomRequest = Request & {
+  user?: UserInterface;
+};
+
+const uploadAttachmentController = async (req: CustomRequest, res: Response) => {
   try {
     const { folderId } = req.body;
     const file = req.file;
 
-    console.log('REQ.BODY:', req.body);
-    console.log('REQ.FILE:', req.file);
-
-    if (!file || !folderId) {
-      return res.status(400).json({ msg: 'Archivo y folderId son requeridos' });
+    if (!file) {
+      console.error('❌ No se recibió el archivo');
+      return res.status(400).json({ msg: 'Archivo requerido' });
     }
 
-    // 👇 Valores forzados por ahora
-    const attachment = new Attachment({
-      name: file.originalname || 'Archivo sin nombre',
-      file: file.path || 'ruta/desconocida',
-      fileType: path.extname(file.originalname).replace('.', '') || 'desconocido',
-      category: 'FolderAttachment',
-      createdBy: '64edeb29467d39a9f6e35b2b', // <-- Asegúrate que este ID existe
-      folder: folderId
+    if (!folderId) {
+      console.error('❌ No se recibió folderId');
+      return res.status(400).json({ msg: 'folderId requerido' });
+    }
+
+    if (!req.user || !req.user._id) {
+      console.error('❌ No se encontró el ID de usuario');
+      return res.status(401).json({ msg: 'No se encontró el ID de usuario' });
+    }
+
+    const name = file.originalname;
+    const filePath = file.path?.replace(/\\/g, '/');
+    const fileType = path.extname(name).replace('.', '') || 'unknown';
+    const category = 'FolderAttachment';
+    const createdBy = req.user._id;
+
+    console.log('📎 Subiendo archivo con:', {
+      name,
+      filePath,
+      fileType,
+      folderId,
+      category,
+      createdBy,
     });
 
-    await attachment.save();
+    const attachment = await Attachment.create({
+      name,
+      file: filePath,
+      fileType,
+      folder: folderId,
+      category,
+      createdBy,
+    });
 
-    return res.status(201).json({ msg: 'Archivo subido correctamente', attachment });
-  } catch (err) {
-    console.error('Upload error:', err);
-    return res.status(500).json({ msg: 'Error al subir archivo', error: err });
+    res.status(201).json({ msg: 'Archivo subido exitosamente', attachment });
+  } catch (error: any) {
+    console.error('❌ Error en uploadAttachmentController:', error.message, error.errors || error);
+    res.status(500).json({ msg: 'Error interno al subir archivo', error });
   }
 };
 
