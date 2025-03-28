@@ -1,5 +1,5 @@
 import { getMachineListApi, getMachineById, deleteMachine, 
-        updateMachineByAdminApi, getAllMachineListApi, updateMachineImageApi, updateMachineTagImageApi, createMachineApi } from "@Api/machine"
+        updateMachineByAdminApi, getAllMachineListApi, updateMachineImageApi, updateMachineTagImageApi, createMachineApi, updateMachineCertificadoApi } from "@Api/machine"
 import { setUserAuthData,setCurrentMachine,setCurrentMachineError,setCurrentMachineSuccess,setMachineAttachments,setMachineAttachmentsError,setMachineAttachmentsSuccess,setMachineList,setMachineListError,setMachineListSuccess, setMachineData } from '../slices/machineSlice'
 import { toast } from "react-toastify";
 import { ToastSuccess, ToastError } from '@components/shared/Toast';
@@ -123,6 +123,22 @@ export const createMachineAction = (data) => {
             else dispatch(setMachineListSuccess(response))
         } catch (error) {
             dispatch(setMachineListError({error: `Error: ${error} `}))
+        }
+    }
+}
+
+export function updateMachineCertificadoAction(id, file) {
+    return async(dispatch) => {
+        dispatch(setCurrentMachine());
+        try {
+            if (id) {
+                await updateMachineCertificadoApi(id, file);
+                const response = await getMachineById(id);
+                dispatch(setCurrentMachineSuccess(response));
+            }
+        } catch (error) {
+            console.error(error);
+            dispatch(setCurrentMachineError({ error: `Error: ${error}` }));
         }
     }
 }

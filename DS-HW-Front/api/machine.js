@@ -326,3 +326,22 @@ export async function updateMachineTagImageApi(id, file) {
         })
 
 }
+export async function updateMachineCertificadoApi(id, file) {
+    const url = `${envUrl}/machineCalibration/updatebyadmin/${id}`;
+    const token = await getToken();
+
+    const formData = new FormData();
+    formData.append('cargar_certificado', file);
+
+    const params = {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            xtoken: token
+        }
+    };
+
+    return axios.put(url, formData, params)
+        .then(response => response.data)
+        .catch(err => err);
+}
+
