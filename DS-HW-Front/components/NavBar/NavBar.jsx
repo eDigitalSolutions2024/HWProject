@@ -55,6 +55,7 @@ export default function NavBar() {
                         {/* {auth?.role?.readPermissions.includes('roles') || auth?.role?.role === "ADMIN_ROLE" ? <NavItem text={'Roles'} route={'/roles'} icon={'bi bi-person-lines-fill'} /> : null} */}
                         {/* {auth?.role?.readPermissions.includes('events') && (<NavItem text={'Linea de Eventos'} route={'/events'} icon={'bi bi-calendar-week'} />)} */}
                         {auth?.role?.readPermissions.includes('timeLine') || auth?.role?.role === "ADMIN_ROLE" ? <NavItem text={'Maquinas totales'} route={'/machine'} icon={'bi bi-calendar-range'} /> : null}
+                        {auth?.role?.readPermissions.includes('timeLine') || auth?.role?.role === "ADMIN_ROLE" ? <NavItem text={'Certificados Criticos de Agencia'} route={'/certificados_criticos_agencia'} icon={'bi bi-calendar-range'} /> : null}
                         <li className='nav-item w-100' onClick={() => logout()} style={{ cursor: 'pointer' }}>
                             <a className='nav-link text-light item-option'>
                                 <i className="bi bi-box-arrow-left mx-3"></i>

@@ -15,6 +15,8 @@ export default function AllMachinesList() {
     const machinesList = useSelector(state => state.machine.list);
     const isLoading = useSelector(state => state.machine.isLoadingList);
 
+    const [selectedSeccion, setSelectedSeccion] = useState('');
+    
     const [search, setSearch] = useState('');
     const [filteredData, setFilteredData] = useState([]);
     const [filters, setFilters] = useState({
@@ -36,22 +38,24 @@ export default function AllMachinesList() {
                 machine.serial?.toLowerCase().includes(search.toLowerCase()) ||
                 machine.proveedor?.toLowerCase().includes(search.toLowerCase())
             );
-
+    
             const calibracionDate = dayjs(machine.last_calibration_date);
             const expiraDate = dayjs(machine.expira);
-
+    
             const matchesFilters = (
                 (!filters.fecha_calibracion_min || calibracionDate.isAfter(filters.fecha_calibracion_min)) &&
                 (!filters.fecha_calibracion_max || calibracionDate.isBefore(filters.fecha_calibracion_max)) &&
                 (!filters.expira_min || expiraDate.isAfter(filters.expira_min)) &&
                 (!filters.expira_max || expiraDate.isBefore(filters.expira_max))
             );
-
-            return matchesSearch && matchesFilters;
+    
+            const matchesSeccion = !selectedSeccion || machine.seccion === selectedSeccion;
+    
+            return matchesSearch && matchesFilters && matchesSeccion;
         });
-
+    
         setFilteredData(filtered);
-    }, [search, filters, machinesList]);
+    }, [search, filters, machinesList, selectedSeccion]);
 
     const exportToExcel = () => {
         const worksheet = XLSX.utils.json_to_sheet(filteredData.map(machine => ({
@@ -62,24 +66,22 @@ export default function AllMachinesList() {
             'Fecha Calibración': dayjs(machine.last_calibration_date).format("YYYY-MM-DD"),
             'Expira': dayjs(machine.expira).format("YYYY-MM-DD"),
             'Estatus': machine.status ? 'Activo' : 'Inactivo',
-            'Seccion': machine.seccion,//apartado de seccion para exportat a excell
+            'Sección': machine.seccion
         })));
-
+    
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Máquinas");
-
+    
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const file = new Blob([excelBuffer], { type: 'application/octet-stream' });
-        saveAs(file, 'maquinas.xlsx');
+        saveAs(file, 'BasedeDatosListadoMaquinas.xlsx');
     };
+    
+    
 
 
     return ( 
     <div className="card p-4 shadow-sm border-0 rounded -4">
-        <div class = "d-flex gap-2 mb-3">
-            <button class ="btn btn-light rounded-pill px-4 py-2 shadow-sm" onclick="openTab(event, 'Interna')">Interna</button>
-            <button class ="btn btn-light rounded-pill px-4 py-2 shadow-sm" onclick="openTab(event, 'Externa')">Externa</button>
-        </div>
         <div className="card p-4 shadow-sm border-0 rounded -5">
             <div className='mb-3'>
                 <input
@@ -91,18 +93,25 @@ export default function AllMachinesList() {
                 />
 
                     <div className='d-flex flex-wrap justify-content-end align-items-end gap-3 mb-3'>
-
-                        <div>
-                            <label>Seccion</label>
-                            <select
-                                name = 'seccion'
-                                className = 'form-control my 1'
-                                value = {filters.seccion}
-                                onChange = {(e) => setFilters({ ...filters, seccion: e.target.value})}>
-                                <option value = "">Todas</option>
-                                <option value = "seccion">Interna</option>
-                                <option value = "seccion">Externa</option>
-                            </select>
+                    <div className="d-flex gap-2 mb-3">
+                        <button
+                            className={`btn rounded-pill px-4 py-2 shadow-sm ${selectedSeccion === 'Interna' ? 'btn-primary text-white' : 'btn-light'}`}
+                            onClick={() => setSelectedSeccion('Interna')}
+                        >
+                            Interna
+                        </button>
+                        <button
+                            className={`btn rounded-pill px-4 py-2 shadow-sm ${selectedSeccion === 'Externa' ? 'btn-primary text-white' : 'btn-light'}`}
+                            onClick={() => setSelectedSeccion('Externa')}
+                        >
+                            Externa
+                        </button>
+                        <button
+                            className={`btn rounded-pill px-4 py-2 shadow-sm ${selectedSeccion === '' ? 'btn-outline-dark' : 'btn-light'}`}
+                            onClick={() => setSelectedSeccion('')}
+                        >
+                            Todas
+                        </button>
                         </div>
 
                         <div>
@@ -138,6 +147,7 @@ export default function AllMachinesList() {
                 <table className="table">
                     <thead>
                         <tr>
+                            <th className='table-header'>Sección</th>
                             <th className='table-header'>Estatus</th>
                             <th className='table-header'>Id Maquina</th>
                             <th className='table-header'>Nombre Maquina</th>
@@ -151,6 +161,7 @@ export default function AllMachinesList() {
                     <tbody>
                         {filteredData.map((data, index) => (
                             <tr key={index}>
+                              <td>{data?.seccion}</td>
                               <td>
                                     <span
                                         className={`badge ${data.status ? 'bg-success' : 'bg-danger'} px-4 py-2 fs-6 rounded-pill`}
