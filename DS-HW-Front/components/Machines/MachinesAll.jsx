@@ -25,14 +25,19 @@ export default function AllMachinesList() {
         expira_max: '',
     });
 
-    const deleteLogicMachine = (id) => {
+
+    const deleteLogicMachine = (id, e) => {
+            dispatch(deleteMachineByidAction(id));
+        }
+
+   /* const deleteLogicMachine = (id, e) => {
         const confirmed = window.confirm("¿Estás seguro que deseas eliminar esta máquina?");
         if (confirmed) {
             dispatch(deleteMachineByidAction(id)).then(() => {
                 dispatch(getMachineListApi()); // 👈 vuelve a cargar la lista real desde la BD
             });
         }
-    };
+    };*/
     
 
     useEffect(() => {
@@ -186,7 +191,7 @@ export default function AllMachinesList() {
                                         />
                                     </td>
                                     <td>
-                                        <button className='btn btn-danger btn-sm' onClick={() => deleteLogicMachine(data?._id)}>
+                                        <button className='btn btn-danger btn-sm' onClick={(e) => deleteLogicMachine(data?._id, e)}>
                                             Eliminar
                                         </button>
                                     </td>
