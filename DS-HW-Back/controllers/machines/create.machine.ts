@@ -31,6 +31,7 @@ const createMachineController = async (req: RequestBody, res: Response) => {
         liga_certificado
     } = req.body;
 
+
     try {
         const dateLastCalibDate = dayjs(last_calibration_date).toDate();
         const dateExpira = dayjs(expira).toDate();

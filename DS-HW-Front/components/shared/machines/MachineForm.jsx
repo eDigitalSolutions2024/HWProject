@@ -67,14 +67,6 @@ const MachineForm = (props) => {
     
             const duplicateId = await checkDuplicate('id_maquina', id);
             console.log("🧪 duplicateId?", duplicateId);
-    
-            if (duplicateSerial) {
-                setError("serial", {
-                    type: "manual",
-                    message: `Ya existe una máquina con el serial "${serial}"`
-                });
-                return;
-            }
             
             if (duplicateId) {
                 setError("id_maquina", {

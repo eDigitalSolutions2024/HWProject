@@ -23,8 +23,7 @@ const CalibrationSchema = new Schema({
     },
     serial: {
         type: String,
-        required: [true, 'El serial es obligatorio'],
-        unique: true
+        required: [true, 'El serial es obligatorio']
     },
     manufacturador: {
         type: String,
