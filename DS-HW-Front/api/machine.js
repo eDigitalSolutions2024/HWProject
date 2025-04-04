@@ -64,7 +64,7 @@ export async function generateQR(id) {
 }
 
 //Get Machine List
-export async function getMachineListApi(page = 1, search = '', role = '', limit = 10) {
+export async function getMachineListApi(page = 1, search = '', role = '', limit = 1000) {
     // ?page=${page}&search=${search}&role=${role}&limit=${limit}
     const url = `${envUrl}/machineCalibration/`
     const token = await getToken();
@@ -84,7 +84,7 @@ export async function getMachineListApi(page = 1, search = '', role = '', limit 
 }
 
 //Get All Machine List
-export async function getAllMachineListApi(page = 1, search = '', role = '', limit = 10) {
+export async function getAllMachineListApi(page = 1, search = '', role = '', limit = 1000) {
     // ?page=${page}&search=${search}&role=${role}&limit=${limit}
     const url = `${envUrl}/machineCalibration/allmachines`
     const token = await getToken();

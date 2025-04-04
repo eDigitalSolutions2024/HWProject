@@ -3,9 +3,9 @@ import dayjs from 'dayjs';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import MachineImage from '../shared/machines/MachineImages';
-import { getMachineImage } from '../../api/machine';
+import { getMachineImage, getMachineListApi, deleteMachine } from '../../api/machine';
 import NoDataFound from '../shared/NoDataFound';
-import { deleteMachineByidAction } from '@machineActions';
+import { deleteMachineByidAction} from '@machineActions';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
@@ -30,7 +30,17 @@ export default function AllMachinesList() {
             dispatch(deleteMachineByidAction(id));
         }
 
-   /* const deleteLogicMachine = (id, e) => {
+
+    /*const deleteLogicMachine = (id, e) => {
+        const confirmed = window.confirm("¿Estás seguro que deseas eliminar esta máquina?");
+        if (confirmed) {
+            dispatch(deleteMachineByidAction(id)).then(() => {
+                dispatch(getMachineListAction()); // recarga solo máquinas activas
+            });
+        }
+    };*/
+
+    /*const deleteLogicMachine = (id, e) => {
         const confirmed = window.confirm("¿Estás seguro que deseas eliminar esta máquina?");
         if (confirmed) {
             dispatch(deleteMachineByidAction(id)).then(() => {
@@ -190,11 +200,7 @@ export default function AllMachinesList() {
                                             height='100px'
                                         />
                                     </td>
-                                    <td>
-                                        <button className='btn btn-danger btn-sm' onClick={(e) => deleteLogicMachine(data?._id, e)}>
-                                            Eliminar
-                                        </button>
-                                    </td>
+                                    <td><button className='btn btn-danger' onClick={(e) => deleteLogicMachine(data?._id, e)}>Eliminar</button></td>
                                 </tr>
                             ))}
                         </tbody>
