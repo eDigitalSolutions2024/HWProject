@@ -10,7 +10,7 @@ import MachineDetail from "../shared/machines/MachineDetail"
 import NoDataFound from '../shared/NoDataFound';
 import Modal from "@components/shared/Modal"
 import { deleteMachineByidAction } from '@machineActions'
-
+  
 
 export default function MachinesList() {
     const dispatch = useDispatch();

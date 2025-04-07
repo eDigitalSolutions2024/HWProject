@@ -26,9 +26,19 @@ export default function AllMachinesList() {
     });
 
 
-    const deleteLogicMachine = (id, e) => {
-            dispatch(deleteMachineByidAction(id));
+    const deleteLogicMachine = async (id, e) => {
+        try {
+          await dispatch(deleteMachineByidAction(id));
+          alert('¡Máquina eliminada exitosamente!');
+        } catch (err) {
+          alert('Error al eliminar la máquina.');
         }
+      };
+
+
+    /*const deleteLogicMachine = (id, e) => {
+            dispatch(deleteMachineByidAction(id));
+        }*/
 
 
     /*const deleteLogicMachine = (id, e) => {
@@ -200,7 +210,16 @@ export default function AllMachinesList() {
                                             height='100px'
                                         />
                                     </td>
-                                    <td><button className='btn btn-danger' onClick={(e) => deleteLogicMachine(data?._id, e)}>Eliminar</button></td>
+                                    <td><button
+                                            className='btn btn-danger'
+                                            onClick={(e) => {
+                                                if (window.confirm('¿Estás seguro de que quieres eliminar esta máquina?')) {
+                                                deleteLogicMachine(data?._id, e);
+                                                }
+                                            }}
+                                            >
+                                            Eliminar
+                                        </button></td>
                                 </tr>
                             ))}
                         </tbody>
