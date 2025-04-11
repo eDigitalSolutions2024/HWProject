@@ -136,7 +136,7 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
       toast.error('Error al eliminar archivo');
     }
   };
-
+  
   return (
     <div className="folder-browser">
       <div className="d-flex justify-content-between align-items-center mb-3">
@@ -145,6 +145,9 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
           ➕ Crear Carpeta
         </button>
       </div>
+
+      <button className="fab-button" onClick={() => setShowForm(!showForm)} title="Crear carpeta">+</button>
+
 
       {showForm && (
         <div className="card p-3 mb-3 shadow-sm animate-slide-in">

@@ -279,7 +279,9 @@ export async function deleteMachine(id) {
             return response.data;
         })
         .catch(err => {
-            return err;
+            console.error('Error al eliminar máquina:', err);
+            return err.response?.data || { error: 'Ocurrió un error inesperado al eliminar la máquina.' };
+            //return err;
         })
 }
 

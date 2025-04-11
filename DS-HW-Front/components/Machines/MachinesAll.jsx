@@ -62,6 +62,7 @@ export default function AllMachinesList() {
 
     useEffect(() => {
         const filtered = machinesList.filter((machine) => {
+            if(machine?.status !== true) return false;
             const matchesSearch = (
                 machine.id_maquina?.toLowerCase().includes(search.toLowerCase()) ||
                 machine.nomMaquina?.toLowerCase().includes(search.toLowerCase()) ||
