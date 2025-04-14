@@ -15,8 +15,19 @@ interface FileItem {
   _id: string;
   name: string;
   file: string;
-  filename?: string; // 👈 Opcional
+  filename?: string;
+  folder?: {
+    _id: string;
+    name: string;
+  };
 }
+
+/*interface FileItem {
+  _id: string;
+  name: string;
+  file: string;
+  filename?: string; // 👈 Opcional
+}*/
 
 
 interface Props {
@@ -24,6 +35,8 @@ interface Props {
   onFolderClick: (folder: Folder) => void;
 }
 
+
+ 
 const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
   const [folders, setFolders] = useState<Folder[]>([]);
   const [files, setFiles] = useState<FileItem[]>([]);
@@ -33,11 +46,27 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [uploading, setUploading] = useState<boolean>(false);
 
+  const[searchTerm, setSearchTerm] = useState('');//agregue esto nuevo 4-14-25
+
+  const filteredFolders = folders.filter(folder =>
+    folder.name.toLowerCase().includes (searchTerm.toLowerCase())
+  );//agregue esto nuevo 4-14-25
+
+  const filteredFiles = files.filter(file =>
+    (file.name || file.filename || '').toLowerCase().includes(searchTerm.toLowerCase())
+  );//agregue esto nuevo 4-14-25
+
   useEffect(() => {
+    fetchFolders();
+    fetchFiles(); // SIEMPRE ejecuta fetchFiles
+  }, [currentFolder]);
+  
+
+  /*useEffect(() => {
     fetchFolders();
     if (currentFolder) fetchFiles();
     else setFiles([]);
-  }, [currentFolder]);
+  }, [currentFolder]);*/
 
   const fetchFolders = async () => {
     try {
@@ -51,6 +80,27 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
 
   const fetchFiles = async () => {
     try {
+      let res;
+  
+      if (currentFolder) {
+        console.log('📥 Fetching archivos de folder:', currentFolder);
+        res = await axiosInstance.get(`/attachments/folder/${currentFolder}`);
+      } else {
+        console.log('📥 Fetching TODOS los archivos desde inicio');
+        res = await axiosInstance.get(`/attachments/all`);
+      }
+  
+      console.log('📦 Archivos recibidos:', res.data);
+      setFiles(res.data);
+    } catch (err) {
+      console.error('Error fetching files:', err);
+      toast.error('Error al cargar archivos');
+    }
+  };
+  
+
+  /*const fetchFiles = async () => {
+    try {
       console.log('📥 Fetching archivos de folder:', currentFolder);
       const res = await axiosInstance.get(`/attachments/folder/${currentFolder}`);
       console.log('📦 Archivos recibidos:', res.data);
@@ -59,7 +109,7 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
       console.error('Error fetching files:', err);
       toast.error('Error al cargar archivos');
     }
-  };
+  };*/
 
   const handleCreateFolder = async () => {
     if (!folderName.trim()) return;
@@ -164,8 +214,19 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
         </div>
       )}
 
+      {/*Agregue esto nuevo para la barra de busqueda 4-14-25 */}
       <div className="folder-list">
-        {folders.map((folder) => (
+        <div className = "mb-3">
+        <input
+          type = "text"
+          className = "form-control"
+          placeholder="Buscar carpeta o archivos"
+          value = {searchTerm}
+          onChange = {(e) => setSearchTerm(e.target.value)}/>
+        </div>
+        
+        
+        {filteredFolders.map((folder) => (//reemplazo de folders.map por filteredFolders.map
           <div
             key={folder._id}
             className="folder-item pointer d-flex align-items-center justify-content-between p-3 mb-2 bg-white border rounded shadow-sm hover-folder animate-fade-in"
@@ -188,68 +249,92 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
         ))}
       </div>
 
-      {currentFolder && (
-        <div className="mt-4">
-          <h5 className="mb-3">📎 Archivos</h5>
-          <div className="mb-3 d-flex">
-            <input
-              type="file"
-              className="form-control me-2"
-              onChange={(e) => setFile(e.target.files?.[0] || null)}
-              disabled={!currentFolder}
-            />
-            <button className="btn btn-primary" onClick={handleFileUpload} disabled={!currentFolder || uploading}>
-              {uploading ? 'Subiendo...' : 'Subir'}
-            </button>
-          </div>
+      {/* Archivos */}
+{(currentFolder || searchTerm) && (
+  <div className="mt-4">
+    <h5 className="mb-3">📎 Archivos</h5>
 
-          {uploading && (
-            <div className="progress w-100 mb-3">
-              <div
-                className="progress-bar"
-                role="progressbar"
-                style={{ width: `${uploadProgress}%` }}
-                aria-valuenow={uploadProgress}
-                aria-valuemin={0}
-                aria-valuemax={100}
-              >
-                {uploadProgress}%
+    {/* Subida solo si estás en una carpeta */}
+    {currentFolder && (
+      <div className="mb-3 d-flex">
+        <input
+          type="file"
+          className="form-control me-2"
+          onChange={(e) => setFile(e.target.files?.[0] || null)}
+          disabled={!currentFolder}
+        />
+        <button
+          className="btn btn-primary"
+          onClick={handleFileUpload}
+          disabled={!currentFolder || uploading}
+        >
+          {uploading ? 'Subiendo...' : 'Subir'}
+        </button>
+      </div>
+    )}
+
+    {/* Barra de progreso */}
+    {uploading && (
+      <div className="progress w-100 mb-3">
+        <div
+          className="progress-bar"
+          role="progressbar"
+          style={{ width: `${uploadProgress}%` }}
+          aria-valuenow={uploadProgress}
+          aria-valuemin={0}
+          aria-valuemax={100}
+        >
+          {uploadProgress}%
+        </div>
+      </div>
+    )}
+
+    {/* Lista de archivos */}
+    <div className="file-list">
+      {filteredFiles.length > 0 ? (
+        filteredFiles.map((f) => (
+          //console.log("folder recibido: ", f.folder);
+          <div
+            key={f._id}
+            className="file-item d-flex justify-content-between align-items-center p-3 mb-2 bg-light border rounded shadow-sm animate-fade-in"
+          >
+            <div className="d-flex align-items-center">
+              <span className="me-2 fs-5 text-danger">📄</span>
+              <div>
+                <a
+                  href={`/api/attachments/cca/${f._id}/download`}
+                  className="text-decoration-none fw-semibold"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {f.name || f.filename}
+                </a>
+                {f.folder && (
+                  <div className="text-muted small mt-1">
+                    🗂️ Carpeta: <strong>{f.folder.name}</strong>
+                  </div>
+                )}
               </div>
             </div>
-          )}
-
-<div className="file-list">
-  {files.map((f) => (
-    <div
-      key={f._id}
-      className="file-item d-flex justify-content-between align-items-center p-3 mb-2 bg-light border rounded shadow-sm animate-fade-in"
-    >
-      <div className="d-flex align-items-center">
-        <span className="me-2 fs-5 text-danger">📄</span>
-                <a
-          href={`/api/attachments/cca/${f._id}/download`}
-          className="text-decoration-none fw-semibold"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {f.name || f.filename}
-        </a>
-
-      </div>
-      <button className="btn btn-sm btn-outline-danger" onClick={() => handleDeleteFile(f._id)}>
-        🗑️
-      </button>
-    </div>
-  ))}
-</div>
-
-
-          {files.length === 0 && !uploading && (
-            <div className="text-muted text-center mt-3">📭 No hay archivos en esta carpeta</div>
-          )}
-        </div>
+            <button
+              className="btn btn-sm btn-outline-danger"
+              onClick={() => handleDeleteFile(f._id)}
+            >
+              🗑️
+            </button>
+          </div>
+        ))
+      ) : (
+        searchTerm && (
+          <div className="text-muted text-center mt-3">
+            📭 No se encontraron archivos para "<strong>{searchTerm}</strong>"
+          </div>
+        )
       )}
-    </div>
+        </div>
+      </div>
+    )}
+  </div>
   );
 };
 

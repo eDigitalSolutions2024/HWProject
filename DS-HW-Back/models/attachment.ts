@@ -24,6 +24,11 @@ const AttachmentSchema = new Schema({
         type: String,
         required: [true, 'The file path is required'],
     },
+    folder: {
+        type: Schema.Types.ObjectId,
+        ref: 'folder',
+        required: true
+    },
     createdBy: {
         type: Schema.Types.ObjectId,
         ref: 'User',
