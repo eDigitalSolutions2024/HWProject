@@ -201,25 +201,30 @@ const MachineForm = (props) => {
                         <span className='text-danger text-small d-block mb-2'>{errors?.last_calibration_date?.message}</span>
                     </div>
 
+
                     <div className='d-flex flex-column w-100 ms-2'>
                         <label className='input-label'><span className="color-primary h5">*</span>  Intervalo de calibración</label>
                         <input
-    name='calibration_interval_define'
-    type="text"
-    placeholder='Intervalo de calibración'
-    className='form-control my-2'
-    onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')}
-    {...register("calibration_interval_define", {
-        required: { value: true, message: 'El Intervalo de calibración es obligatorio' },
-    })}
-/>
-
-
+                            name='calibration_interval_define'
+                            type="text"
+                            placeholder='Intervalo de calibración'
+                            className='form-control my-2'
+                            onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')}
+                            {...register("calibration_interval_define", {
+                                required: { value: true, message: 'El Intervalo de calibración es obligatorio' },
+                            })}
+                        />
                         <span className='text-danger text-small d-block mb-2'>{errors?.calibration_interval_define?.message}</span>
                     </div>
 
                     <div className='d-flex flex-column w-100 ms-2'>
-                        <label className='input-label me-2'><span className="color-primary h5" >*</span>  Tiempo de Intervalo:</label>
+                        <label className='input-label'><span className="color-primary h5">*</span>  Proxima calibracion </label>
+                        <input name='next_calibration' type="date" placeholder='Proxima calibracion' className='form-control my-2' {...register("next_calibration ")} />
+                        <span className='text-danger text-small d-block mb-2'>{errors?.comments?.message}</span>
+                    </div>
+
+                    <div className='d-flex flex-column w-100 ms-2'>
+                        <label className='input-label me-2'><span className="color-primary h5" >*</span>  Tiempo de Intervalo </label>
                         <select name='tiempoIntervalo' className='form-control my-2' {...register("tiempoIntervalo", { required: { value: true, message: 'El tiempo de intervalo es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} >
                             <option>Semana/s</option>
                             <option>Mes/s</option>

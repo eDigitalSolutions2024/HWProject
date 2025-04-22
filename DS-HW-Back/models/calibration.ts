@@ -57,6 +57,10 @@ const CalibrationSchema = new Schema({
         type: String,
         required: [true, 'Intervalo de calibración es obligatoria'],
     },
+    next_calibration: {
+        type: Date,
+        required: [true, 'Siguiente calibración es obligatoria'],
+    },
     expira: {
         type: Date,
         required: [true, 'La fecha de expiración es obligatoria'],

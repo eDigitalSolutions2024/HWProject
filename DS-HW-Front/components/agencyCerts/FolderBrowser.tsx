@@ -292,12 +292,12 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
     {/* Lista de archivos */}
     <div className="file-list">
       {filteredFiles.length > 0 ? (
-        filteredFiles.map((f) => (
-          //console.log("folder recibido: ", f.folder);
+        filteredFiles.map((f) => {
+          console.log("folder recibido: ", f.folder);
+          return (
           <div
             key={f._id}
-            className="file-item d-flex justify-content-between align-items-center p-3 mb-2 bg-light border rounded shadow-sm animate-fade-in"
-          >
+            className="file-item d-flex justify-content-between align-items-center p-3 mb-2 bg-light border rounded shadow-sm animate-fade-in">
             <div className="d-flex align-items-center">
               <span className="me-2 fs-5 text-danger">📄</span>
               <div>
@@ -323,7 +323,8 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
               🗑️
             </button>
           </div>
-        ))
+          );
+        })
       ) : (
         searchTerm && (
           <div className="text-muted text-center mt-3">
