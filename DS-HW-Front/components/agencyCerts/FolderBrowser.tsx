@@ -4,6 +4,8 @@ import axiosInstance from '../../api/axiosInstance';
 import './FolderBrowser.scss';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 interface Folder {
   _id: string;
@@ -186,9 +188,34 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
       toast.error('Error al eliminar archivo');
     }
   };
+
+  //Esportar el nombre de los archivos a un excel
+  const exportToExcel = () => {
+    const data = filteredFiles.map((f) => ({
+      NombreArchivo: f.name || f.filename,
+      Carpeta: f.folder?.name || 'Sin carpeta'
+
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Archivos');
+
+    const excelBuffer = XLSX.write(workbook, {bookType: 'xlsx', type: 'array'});
+    const blob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+
+    saveAs(blob, 'archivos.xlsx');
+  }
   
   return (
     <div className="folder-browser">
+
+      <div className="d-flex justify-content-end mb-3">
+        <button className='btn btn-outline-success' onClick={exportToExcel}>📤 Exportar nombres a Excel</button>
+      </div>
+
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h4 className="text-primary fw-bold">📁 Carpetas</h4>
         <button className="btn btn-outline-primary rounded-pill shadow-sm px-3 py-1" onClick={() => setShowForm(!showForm)}>
@@ -291,6 +318,11 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
 
     {/* Lista de archivos */}
     <div className="file-list">
+
+      <div className="d-flex justify-content-end mb-3">
+        <button className='btn btn-outline-success' onClick={exportToExcel}>📤 Exportar nombres a Excel</button>
+      </div>
+
       {filteredFiles.length > 0 ? (
         filteredFiles.map((f) => {
           console.log("folder recibido: ", f.folder);

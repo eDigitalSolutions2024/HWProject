@@ -11,6 +11,7 @@ export interface Calibration {
     loc2: string
     loc3:string
     last_calibration_date:Date
+    next_calibration: Date
     calibration_interval_define:string
     expira:Date
     activo:Boolean

@@ -30,7 +30,7 @@ const updateMachineController = async(req: RequestBody, res: Response) => {
 
     const {
         id_maquina, nomMaquina, serial, manufacturador, seccion,
-        proveedor, type, loc1, loc2, loc3, last_calibration_date,
+        proveedor, type, loc1, loc2, loc3, last_calibration_date, next_calibration,
         calibration_interval_define, expira, rango_trabajo, comments,
         liga_certificado, status
     } = req.body;
@@ -100,7 +100,7 @@ const updateMachineController = async(req: RequestBody, res: Response) => {
 
         const calibration = await Calibration.findByIdAndUpdate(_id, {
             id_maquina, nomMaquina, serial, manufacturador, seccion,
-            proveedor, type, loc1, loc2, loc3,
+            proveedor, type, loc1, loc2, loc3, next_calibration,
             last_calibration_date: dateLastCalibDate,
             calibration_interval_define, expira: dateExpira, rango_trabajo, comments,
             liga_certificado,

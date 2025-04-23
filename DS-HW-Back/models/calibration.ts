@@ -59,7 +59,6 @@ const CalibrationSchema = new Schema({
     },
     next_calibration: {
         type: Date,
-        required: [true, 'Siguiente calibración es obligatoria'],
     },
     expira: {
         type: Date,

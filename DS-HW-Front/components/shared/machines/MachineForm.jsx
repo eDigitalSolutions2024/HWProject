@@ -96,7 +96,7 @@ const MachineForm = (props) => {
                 </div>
                 <div className='d-flex flex-between w-100'>
                     <div className='d-flex flex-column w-100 me-2'>
-                        <label className='input-label me-2'><span className="color-primary h5" >*</span>  Seccion:</label>
+                        <label className='input-label me-2'><span className="color-primary h5" ><strong>*</strong></span>  <strong>Seccion</strong></label>
                         <select name='seccion' className='form-control my-2' {...register("seccion", { required: { value: true, message: 'La seccion es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} >
                             <option>Interna</option>
                             <option>Externa</option>
@@ -105,7 +105,7 @@ const MachineForm = (props) => {
                     </div>
                     <div className='d-flex flex-column w-100 ms-2'>
                         <label className='input-label'>
-                            <span className="color-primary h5"></span> Cargar Certificado:
+                            <span className="color-primary h5"></span><strong>Cargar Certificado</strong> 
                         </label>
     
                         {/* Input para cargar el archivo */}
@@ -120,54 +120,54 @@ const MachineForm = (props) => {
                         </span>
                     </div>
                     <div className='d-flex flex-column w-100 ms-2'>
-                        <label className='input-label'><span className="color-primary h5"></span>  Liga Certificado</label>
-                        <input name='liga_certificado' type="text" placeholder='Liga de Certificado' className='form-control my-2' {...register("liga_certificado")}/>
+                        <label className='input-label'><span className="color-primary h5"></span><strong>Liga Certificado</strong></label>
+                        <input name='liga_certificado' type="text" placeholder='' className='form-control my-2' {...register("liga_certificado")}/>
                         <span className='text-danger text-small d-block mb-2'>{errors?.liga_certificado?.message}</span>
                     </div>
                 </div>
                 <div className='d-flex flex-between w-100'>
                     <div className='d-flex flex-column w-100 me-2'>
-                        <label className='input-label me-2'><span className="color-primary h5" >*</span>  Id</label>
-                        <input name='id_maquina' type="text" placeholder='Id Maquina' className='form-control my-2' {...register("id_maquina", { required: { value: true, message: 'El Id obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
+                        <label className='input-label me-2'><span className="color-primary h5" ><strong>*</strong></span><strong>Id</strong></label>
+                        <input name='id_maquina' type="text" placeholder='' className='form-control my-2' {...register("id_maquina", { required: { value: true, message: 'El Id obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
                         <span className='text-danger text-small d-block mb-2'>{errors?.id_maquina?.message}</span>
                     </div>
 
                     <div className='d-flex flex-column w-100 ms-2'>
-                        <label className='input-label'><span className="color-primary h5">*</span>  Nombre</label>
-                        <input name='nomMaquina' type="text" placeholder='Nombre Maquina' className='form-control my-2' {...register("nomMaquina", { required: { value: true, message: 'El Nombre es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
+                        <label className='input-label'><span className="color-primary h5"><strong>*</strong></span><strong>Nombre</strong></label>
+                        <input name='nomMaquina' type="text" placeholder='' className='form-control my-2' {...register("nomMaquina", { required: { value: true, message: 'El Nombre es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
                         <span className='text-danger text-small d-block mb-2'>{errors?.nomMaquina?.message}</span>
                     </div>
 
                     <div className='d-flex flex-column w-100 ms-2'>
-                        <label className='input-label'><span className="color-primary h5">*</span>  Serial</label>
-                        <input name='serial' type="text" placeholder='Serial' className='form-control my-2' {...register("serial", { required: { value: true, message: 'El Serial es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
+                        <label className='input-label'><span className="color-primary h5"><strong>*</strong></span><strong>Serial</strong></label>
+                        <input name='serial' type="text" placeholder='' className='form-control my-2' {...register("serial", { required: { value: true, message: 'El Serial es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
                         <span className='text-danger text-small d-block mb-2'>{errors?.serial?.message}</span>
                     </div>
                 </div>
 
                 <div className='d-flex flex-between w-100'>
                     <div className='d-flex flex-column w-100 ms-2'>
-                        <label className='input-label'><span className="color-primary h5">*</span>  Manufacturador</label>
-                        <input name='manufacturador' type="text" placeholder='Manufacturador' className='form-control my-2' {...register("manufacturador", { required: { value: true, message: 'El Manufacturador es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
+                        <label className='input-label'><span className="color-primary h5"><strong>*</strong></span><strong>Manufacturador</strong></label>
+                        <input name='manufacturador' type="text" placeholder='' className='form-control my-2' {...register("manufacturador", { required: { value: true, message: 'El Manufacturador es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
                         <span className='text-danger text-small d-block mb-2'>{errors?.manufacturador?.message}</span>
                     </div>
 
                     <div className='d-flex flex-column w-100 ms-2'>
-                        <label className='input-label'><span className="color-primary h5">*</span>  Proveedor</label>
-                        <input name='proveedor' type="text" placeholder='Proveedor' className='form-control my-2' {...register("proveedor", { required: { value: true, message: 'El Proveedor es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
+                        <label className='input-label'><span className="color-primary h5"><strong>*</strong></span><strong>Proveedor</strong></label>
+                        <input name='proveedor' type="text" placeholder='' className='form-control my-2' {...register("proveedor", { required: { value: true, message: 'El Proveedor es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
                         <span className='text-danger text-small d-block mb-2'>{errors?.proveedor?.message}</span>
                     </div>
 
                     <div className='d-flex flex-column w-100 ms-2'>
-                        <label className='input-label'><span className="color-primary h5">*</span>  Tipo</label>
-                        <input name='type' type="text" placeholder='Tipo' className='form-control my-2' {...register("type", { required: { value: true, message: 'El Tipo de maquina es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
+                        <label className='input-label'><span className="color-primary h5"><strong>*</strong></span><strong>Tipo</strong></label>
+                        <input name='type' type="text" placeholder='' className='form-control my-2' {...register("type", { required: { value: true, message: 'El Tipo de maquina es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
                         <span className='text-danger text-small d-block mb-2'>{errors?.type?.message}</span>
                     </div>
                 </div>
 
                 <div className='d-flex flex-between w-100'>
                     <div className='d-flex flex-column w-100 me-2'>
-                        <label className='input-label me-2'><span className="color-primary h5" >*</span>  Área de negocio:</label>
+                        <label className='input-label me-2'><span className="color-primary h5" ><strong>*</strong></span><strong>Área de negocio</strong></label>
                         <select name='loc1' className='form-control my-2' {...register("loc1", { required: { value: true, message: 'El área de negocio es obligatoria' }, minLength: { value: 2, message: "Min lenght 2" } })} >
                             <option>Process Instruments</option>
                             <option>Field Instruments</option>
@@ -182,32 +182,32 @@ const MachineForm = (props) => {
                     </div>
 
                     <div className='d-flex flex-column w-100 ms-2'>
-                        <label className='input-label'><span className="color-primary h5">*</span>  Área de producción</label>
-                        <input name='loc2' type="text" placeholder='Área de producción' className='form-control my-2' {...register("loc2", { required: { value: true, message: 'El Loc2 es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
+                        <label className='input-label'><span className="color-primary h5"><strong>*</strong></span><strong>Área de producción</strong></label>
+                        <input name='loc2' type="text" placeholder='' className='form-control my-2' {...register("loc2", { required: { value: true, message: 'El Loc2 es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
                         <span className='text-danger text-small d-block mb-2'>{errors?.loc2?.message}</span>
                     </div>
 
                     <div className='d-flex flex-column w-100 ms-2'>
-                        <label className='input-label'><span className="color-primary h5">*</span>  Estación</label>
-                        <input name='loc3' type="text" placeholder='Estación' className='form-control my-2' {...register("loc3", { required: { value: true, message: 'El Loc3 de maquina es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
+                        <label className='input-label'><span className="color-primary h5"><strong>*</strong></span><strong>Estación</strong></label>
+                        <input name='loc3' type="text" placeholder='' className='form-control my-2' {...register("loc3", { required: { value: true, message: 'El Loc3 de maquina es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
                         <span className='text-danger text-small d-block mb-2'>{errors?.loc3?.message}</span>
                     </div>
                 </div>
 
                 <div className='d-flex flex-between w-100'>
                     <div className='d-flex flex-column w-100 me-2'>
-                        <label className='input-label'><span className="color-primary h5">*</span>  Última fecha de calibración</label>
-                        <input name='last_calibration_date' type="date" placeholder='Última fecha de calibración'  className='form-control my-2' {...register("last_calibration_date")} />
+                        <label className='input-label'><span className="color-primary h5"><strong>*</strong></span><strong>Última fecha de calibración</strong></label>
+                        <input name='last_calibration_date' type="date" placeholder=''  className='form-control my-2' {...register("last_calibration_date")} />
                         <span className='text-danger text-small d-block mb-2'>{errors?.last_calibration_date?.message}</span>
                     </div>
 
 
                     <div className='d-flex flex-column w-100 ms-2'>
-                        <label className='input-label'><span className="color-primary h5">*</span>  Intervalo de calibración</label>
+                        <label className='input-label'><span className="color-primary h5"><strong>*</strong></span><strong>Intervalo de calibración</strong></label>
                         <input
                             name='calibration_interval_define'
                             type="text"
-                            placeholder='Intervalo de calibración'
+                            placeholder=''
                             className='form-control my-2'
                             onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')}
                             {...register("calibration_interval_define", {
@@ -218,13 +218,13 @@ const MachineForm = (props) => {
                     </div>
 
                     <div className='d-flex flex-column w-100 ms-2'>
-                        <label className='input-label'><span className="color-primary h5">*</span>  Proxima calibracion </label>
-                        <input name='next_calibration' type="date" placeholder='Proxima calibracion' className='form-control my-2' {...register("next_calibration ")} />
+                        <label className='input-label'><span className="color-primary h5"><strong>*</strong></span><strong>Proxima calibracion</strong></label>
+                        <input name='next_calibration' type="date" placeholder='' className='form-control my-2' {...register("next_calibration ")} />
                         <span className='text-danger text-small d-block mb-2'>{errors?.comments?.message}</span>
                     </div>
 
                     <div className='d-flex flex-column w-100 ms-2'>
-                        <label className='input-label me-2'><span className="color-primary h5" >*</span>  Tiempo de Intervalo </label>
+                        <label className='input-label me-2'><span className="color-primary h5" ><strong>*</strong></span><strong>Tiempo de Intervalo</strong></label>
                         <select name='tiempoIntervalo' className='form-control my-2' {...register("tiempoIntervalo", { required: { value: true, message: 'El tiempo de intervalo es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} >
                             <option>Semana/s</option>
                             <option>Mes/s</option>
@@ -237,19 +237,19 @@ const MachineForm = (props) => {
 
                 <div className='d-flex flex-between w-100'>
                 <div className='d-flex flex-column w-100 ms-2'>
-                        <label className='input-label'><span className="color-primary h5">*</span>  Expira</label>
-                        <input name='expira' type="date" placeholder='Expira' className='form-control my-2' {...register("expira")} />
+                        <label className='input-label'><span className="color-primary h5"><strong>*</strong></span><strong>Expira</strong></label>
+                        <input name='expira' type="date" placeholder='' className='form-control my-2' {...register("expira")} />
                         <span className='text-danger text-small d-block mb-2'>{errors?.expira?.message}</span>
                     </div>
                     <div className='d-flex flex-column w-100 ms-2'>
-                        <label className='input-label'><span className="color-primary h5">*</span>  Rango de Trabajo</label>
-                        <input name='rango_trabajo' type="text" placeholder='Rango de Trabajo' className='form-control my-2' {...register("rango_trabajo", { required: { value: true, message: 'El Rango de Trabajo es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
+                        <label className='input-label'><span className="color-primary h5"><strong>*</strong></span><strong>Rango de Trabajo</strong></label>
+                        <input name='rango_trabajo' type="text" placeholder='' className='form-control my-2' {...register("rango_trabajo", { required: { value: true, message: 'El Rango de Trabajo es obligatorio' }, minLength: { value: 2, message: "Min lenght 2" } })} />
                         <span className='text-danger text-small d-block mb-2'>{errors?.rango_trabajo?.message}</span>
                     </div>
 
                     <div className='d-flex flex-column w-100 ms-2'>
-                        <label className='input-label'><span className="color-primary h5"></span>  Comentario</label>
-                        <input name='comments' type="text" placeholder='Comentario' className='form-control my-2' {...register("comments")} />
+                        <label className='input-label'><span className="color-primary h5"></span><strong>Comentario</strong></label>
+                        <input name='comments' type="text" placeholder='' className='form-control my-2' {...register("comments")} />
                         <span className='text-danger text-small d-block mb-2'>{errors?.comments?.message}</span>
                     </div>
 

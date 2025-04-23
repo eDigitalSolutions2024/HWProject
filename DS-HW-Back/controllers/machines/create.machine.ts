@@ -27,7 +27,7 @@ const createMachineController = async (req: RequestBody, res: Response) => {
     const {
         id_maquina, nomMaquina, serial, manufacturador, seccion,
         proveedor, type, loc1, loc2, loc3, last_calibration_date,
-        calibration_interval_define, expira, rango_trabajo, comments,
+        calibration_interval_define, next_calibration, expira, rango_trabajo, comments,
         liga_certificado
     } = req.body;
 
@@ -86,6 +86,7 @@ const createMachineController = async (req: RequestBody, res: Response) => {
             loc3,
             last_calibration_date: dateLastCalibDate,
             calibration_interval_define,
+            next_calibration,
             expira: dateExpira,
             rango_trabajo,
             comments,
