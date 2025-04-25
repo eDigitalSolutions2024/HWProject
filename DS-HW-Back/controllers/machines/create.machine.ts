@@ -92,7 +92,8 @@ const createMachineController = async (req: RequestBody, res: Response) => {
             comments,
             liga_certificado,
             foto_equipo: attachment1?._id,
-            foto_etiqueta_calibracion: attachment2?._id
+            foto_etiqueta_calibracion: attachment2?._id,
+            status: true //nueva linea para crear la maquina
         });
 
         await calibration.save();

@@ -9,6 +9,7 @@ import Required from '../../shared/Required'
 import { useForm } from "react-hook-form";
 //actions
 import { createMachineAction } from '@machineActions';
+import { getMachineListApi } from '@Api/machine';
 
 const MachineForm = (props) => {
     dayjs.extend(utc)
@@ -78,6 +79,8 @@ const MachineForm = (props) => {
             
     
             await dispatch(createMachineAction(data));
+
+            //await dispatch(getMachineListApi());//accion para refrescar
             setShow(false);
         } catch (error) {
             console.error("❌ processData threw an error:", error);

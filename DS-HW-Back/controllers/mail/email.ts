@@ -6,6 +6,8 @@ import logger from "@logger"
 import { User as UserInterface } from "@interfaces/models/user"
 import transporter from "../../helpers/mailer"
 import cron = require('node-cron')
+//import nodemailer from 'nodemailer';
+//import { error } from 'console';
 
 interface RequestBody extends Request {
     body: CalibrationInterface,
@@ -74,6 +76,50 @@ function calculateDaysRemaining(expirationDate: number | Date) {
     return daysRemaining;
 }
 
+/*const sendReminders = async() => {
+    try{
+        logger.verbose(['Mail, cron send reminder']);
+
+        const machines = await Calibration.find({status:true});
+
+        const reminders: string[] = [];
+
+        const today = new Date();
+
+        machines.forEach((machine: any) => {
+            const expirationDate = new Date(machine.expira);
+            const reminderDate = new Date(expirationDate);
+            reminderDate.setDate(reminderDate.getDate() - 1);// recordatorio 1 dia antes
+
+            if (
+                reminderDate.getDate() === today.getDate() &&
+                reminderDate.getMonth() === today.getMonth() &&
+                reminderDate.getFullYear() == today.getFullYear()
+            ) {
+                reminders.push(`${machine.id_maquina} - ${machine.nomMaquina} expira mañana`);
+            }
+        });
+
+        if (reminders.length == 0){
+            console.log("✅ No hay recordatorios por hoy")
+            return;
+        }
+
+        const body = reminders.join('\n');
+
+        await transporter.sendMail({
+            from: 'eddyvazquez2003@outlook.com',
+            to: ['eddy.vazquez1530@gmail.com'],
+            subject: '🔔 Recordatorio: Calibraciones que expiran mañana',
+            text: body,
+        });
+
+        console.log('✅ Recordatorio enviado automaticamente');
+    } catch (error) {
+        console.error('❌ Error al enviar recordatorios automaticamente: ', error);
+    }
+}*/
+
 // Automatic Task to send mail at 7:00am excludes Sat and Sun
 cron.schedule('0 7 * * 1-5', async () => {
     try {
@@ -83,6 +129,15 @@ cron.schedule('0 7 * * 1-5', async () => {
         console.error('Error sending mail:', error);
     }
 });
+
+/*cron.schedule('* * * * *', async () => {
+    try{
+        await sendReminders();
+        console.log('Recordatorios enviados a las 8:00 AM.');
+    } catch (error) {
+        console.error('Error al ejecutar envio de recordatorios: ', error);
+    }
+});*/
 
 async function SendMail() {
     try {
@@ -125,6 +180,8 @@ async function SendMail() {
         console.error("❌ Error al enviar el correo desde cron job:", error);
     }
 }
+
+//sendReminders(); // es para ejecutarlo al iniciar el programa
 
 export default checkExpirationDate;
 //SendMail(); // Manually trigger email sending
