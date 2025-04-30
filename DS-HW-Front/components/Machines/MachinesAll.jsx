@@ -169,7 +169,7 @@ export default function AllMachinesList() {
                         </div>
                     </div>
                 </div>
-
+ 
                 {filteredData?.length > 0 ? (
                     <table className="table">
                         <thead>

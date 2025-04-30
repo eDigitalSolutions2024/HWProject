@@ -62,7 +62,7 @@ export async function generateQR(id) {
             return err;
         })
 }
-
+ 
 //Get Machine List
 export async function getMachineListApi(page = 1, search = '', role = '', limit = 1000) {
     // ?page=${page}&search=${search}&role=${role}&limit=${limit}
