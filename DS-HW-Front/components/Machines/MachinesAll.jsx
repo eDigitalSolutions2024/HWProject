@@ -29,9 +29,9 @@ export default function AllMachinesList() {
     const deleteLogicMachine = async (id, e) => {
         try {
           await dispatch(deleteMachineByidAction(id));
-          alert('¡Máquina eliminada exitosamente!');
+          //alert('¡Máquina eliminada exitosamente!');
         } catch (err) {
-          alert('Error al eliminar la máquina.');
+          //alert('Error al eliminar la máquina.');
         }
       };
 

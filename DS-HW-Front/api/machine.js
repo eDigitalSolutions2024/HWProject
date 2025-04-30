@@ -68,19 +68,21 @@ export async function getMachineListApi(page = 1, search = '', role = '', limit 
     // ?page=${page}&search=${search}&role=${role}&limit=${limit}
     const url = `${envUrl}/machineCalibration/`
     const token = await getToken();
-    const params = {
+   
+    return axios.get(url, {
         headers: {
             'Content-Type': 'application/json',
             xtoken: token
+        },
+        params: {
+            page,
+            search,
+            role,
+            limit
         }
-    }
-    return axios.get(url, params)
-        .then(response => {
-            return response.data;
-        })
-        .catch(err => {
-            return err.response.data;
-        })
+    })
+    .then(response => response.data)
+    .catch(err => err.response.data);
 }
 
 //Get All Machine List
@@ -88,19 +90,21 @@ export async function getAllMachineListApi(page = 1, search = '', role = '', lim
     // ?page=${page}&search=${search}&role=${role}&limit=${limit}
     const url = `${envUrl}/machineCalibration/allmachines`
     const token = await getToken();
-    const params = {
+
+    return axios.get(url, {
         headers: {
-            'Content-Type': 'application/json',
-            xtoken: token
+            'Content-Type': 'aplication/json',
+            xtoken : token
+        },
+        params :{
+            page,
+            search,
+            role,
+            limit
         }
-    }
-    return axios.get(url, params)
-        .then(response => {
-            return response.data;
-        })
-        .catch(err => {
-            return err.response.data;
-        })
+    })
+    .then(response => response.data)
+    .catch(err => err.response.data);
 }
 
 export async function getMachineImage(machineId) {
