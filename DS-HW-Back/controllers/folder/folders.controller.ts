@@ -36,6 +36,16 @@ export const deleteFolder = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error al eliminar carpeta' });
   }
 };
+
+export const getAllFolders = async (req: Request, res: Response) => {
+    try{
+      const folders = await Folder.find();
+    } catch (error) {
+      console.error('Error al obtener todas las carpetas', error);
+      res.status(500).json({ message: 'Error al obtener carpetas'});
+    }
+  };
+
 export const uploadFileToFolder = async (req: Request, res: Response) => {
   const folderId = req.body.folderId;
   const file = req.file;

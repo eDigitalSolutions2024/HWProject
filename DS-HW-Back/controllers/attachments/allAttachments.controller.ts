@@ -3,7 +3,12 @@ import AttachmentModel from '../../models/attachment';
 
 export const getAllAttachments = async (req: Request, res: Response) => {
   try {
-    const archivos = await AttachmentModel.find().populate('folder', 'name');
+    const archivos = await AttachmentModel.find()
+      .populate({
+        path: 'folder',
+        select: 'name parent',
+      });
+
     res.status(200).json(archivos);
   } catch (error) {
     console.error('❌ Error al obtener todos los archivos:', error);

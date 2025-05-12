@@ -94,10 +94,21 @@ export default function AllMachinesList() {
             'Nombre': machine.nomMaquina,
             'Serial': machine.serial,
             'Proveedor': machine.proveedor,
+            'Manufacturador': machine.manufacturador,
             'Fecha Calibración': dayjs(machine.last_calibration_date).format("YYYY-MM-DD"),
             'Expira': dayjs(machine.expira).format("YYYY-MM-DD"),
             'Estatus': machine.status ? 'Activo' : 'Inactivo',
-            'Sección': machine.seccion
+            'Sección': machine.seccion,
+            'Tipo': machine.type,
+            'Unidad de negocio': machine.loc1,
+            'Area de produccion': machine.loc2,
+            'Estacion': machine.loc3,
+            'Ultima calibracion': machine.last_calibration_date,
+            'Expira': machine.expira,
+            'Intervalo tiempo de calibracion': machine.calibration_interval_define,
+            'Rango de trabajo': machine.rango_trabajo,
+            'Proxima calibraicon': machine.next_calibration,
+
         })));
 
         const workbook = XLSX.utils.book_new();

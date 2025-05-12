@@ -7,7 +7,13 @@ const getAttachmentsByFolderCCA = async (req: Request, res: Response) => {
 
     if (!folderId) return res.status(400).json({ msg: 'Falta el folderId' });
 
-    const attachments = await AttachmentCCA.find({ folder: folderId }).sort({ uploadedAt: -1 });
+    const attachments = await AttachmentCCA.find({ folder: folderId })
+      .populate({
+        path: 'folder',
+        select: 'name parent',
+      })
+      .sort({ uploadedAt: -1 });
+      
     res.json(attachments);
   } catch (error) {
     console.error('❌ Error al obtener archivos:', error);

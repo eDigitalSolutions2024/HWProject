@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axiosInstance from '../../api/axiosInstance';
 import './FolderBrowser.scss';
 import { toast } from 'react-toastify';
@@ -58,17 +58,37 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
     (file.name || file.filename || '').toLowerCase().includes(searchTerm.toLowerCase())
   );//agregue esto nuevo 4-14-25
 
+  const formRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     fetchFolders();
     fetchFiles(); // SIEMPRE ejecuta fetchFiles
   }, [currentFolder]);
-  
 
-  /*useEffect(() => {
-    fetchFolders();
-    if (currentFolder) fetchFiles();
-    else setFiles([]);
-  }, [currentFolder]);*/
+  useEffect(() => {
+    const fetchAllFolders = async () => {
+      try{
+        const res= await axiosInstance.get('/folders/all');
+        setFolders(res.data);
+      } catch (error) {
+        console.error('Error al cargar todas lascarpetas: ', error);
+        toast.error('No se pudieron cargar todas las carpetas');
+      }
+    };
+
+    fetchAllFolders();
+  }, []);
+
+  useEffect(() => {
+    console.log('Todas las carpetas cargadas: ', folders);
+  }, [folders]);
+
+  useEffect(() => {
+    if (showForm && formRef.current){
+      formRef.current.scrollIntoView({behavior: 'smooth', block: 'start'});
+    }
+  }, [showForm]);
+  
 
   const fetchFolders = async () => {
     try {
@@ -79,6 +99,7 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
       toast.error('Error al cargar carpetas');
     }
   };
+
 
   const fetchFiles = async () => {
     try {
@@ -99,19 +120,7 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
       toast.error('Error al cargar archivos');
     }
   };
-  
 
-  /*const fetchFiles = async () => {
-    try {
-      console.log('📥 Fetching archivos de folder:', currentFolder);
-      const res = await axiosInstance.get(`/attachments/folder/${currentFolder}`);
-      console.log('📦 Archivos recibidos:', res.data);
-      setFiles(res.data);
-    } catch (err) {
-      console.error('Error fetching files:', err);
-      toast.error('Error al cargar archivos');
-    }
-  };*/
 
   const handleCreateFolder = async () => {
     if (!folderName.trim()) return;
@@ -189,25 +198,50 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
     }
   };
 
-  //Esportar el nombre de los archivos a un excel
-  const exportToExcel = () => {
-    const data = filteredFiles.map((f) => ({
-      NombreArchivo: f.name || f.filename,
-      Carpeta: f.folder?.name || 'Sin carpeta'
+    const buildFolderPath = (folderId: string | undefined): string[] => {
+      if(!folderId) return [];
 
-    }));
+      const path: string[] = [];
+      let current = folders.find(f => f._id === folderId);
 
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Archivos');
+      while(current) {
+        path.unshift(current.name);
+        current = current.parent ? folders.find(f => f._id === current.parent) : undefined;
+      }
 
-    const excelBuffer = XLSX.write(workbook, {bookType: 'xlsx', type: 'array'});
-    const blob = new Blob([excelBuffer], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    });
+      return path;
+    }
 
-    saveAs(blob, 'archivos.xlsx');
-  }
+    //Exportar el nombre de los archivos a un excel
+    const exportToExcel = () => {
+      const data = filteredFiles.map((f) => {
+        const folderId = typeof f.folder === 'string' ? f.folder : f.folder?._id;
+        const pathParts = buildFolderPath(folderId);
+
+        console.log('📂 Ruta reconstruida para', f.name || f.filename, ':', pathParts);
+
+        const folderColumns = Object.fromEntries(
+          pathParts.map((name, index) => [`Carpeta Nivel ${index + 1}`, name])
+        );
+
+        return {
+          ...folderColumns,
+          nombreArchivo: f.name || f.filename,
+        };
+      });
+
+      const worksheet = XLSX.utils.json_to_sheet(data);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Archivos');
+
+      const excelBuffer = XLSX.write(workbook, {bookType: 'xlsx', type: 'array'});
+      const blob = new Blob([excelBuffer], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+
+      saveAs(blob, 'Archivos.xlsx');
+    };
+    
   
   return (
     <div className="folder-browser">
@@ -227,7 +261,7 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
 
 
       {showForm && (
-        <div className="card p-3 mb-3 shadow-sm animate-slide-in">
+        <div ref={formRef} className="card p-3 mb-3 shadow-sm animate-slide-in">
           <input
             type="text"
             className="form-control mb-2"
@@ -325,7 +359,7 @@ const FolderBrowser: React.FC<Props> = ({ currentFolder, onFolderClick }) => {
 
       {filteredFiles.length > 0 ? (
         filteredFiles.map((f) => {
-          console.log("folder recibido: ", f.folder);
+          console.log(f.folder);
           return (
           <div
             key={f._id}
